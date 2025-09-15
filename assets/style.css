@@ -1,5 +1,86 @@
+/* Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* --------------------------
+   Theme variables & theme toggle
+   -------------------------- */
+
+:root{
+/* Dark theme variables applied when checkbox is checked on the sibling .site */
+  --bg: #06060b;
+  --surface: #0b1220;
+  --text: #e6f7f1;
+  --muted: #b8dce0;
+  --accent: #494b47;
+  --accent-2: #21918c;
+  --accent-3: #d06a2b;
+  --hero-1: #0f0526;
+  --hero-2: #311b59;
+  --link: var(--accent-3);
+  --outline: rgba(255,255,255,0.06);
+  --glass: rgba(255,255,255,0.02);
+  --shadow: 0 12px 30px rgba(0,0,0,0.6);
+  --radius: 12px;
+}
+
+
+.theme-toggle-checkbox:checked ~ .site{
+  /* Viridis-light base */
+  --bg: #fbfcfd;               /* page background (light) */
+  --surface: #f2f6f7;          /* panels, cards */
+  --text: #0b1220;             /* main text color (dark) */
+  --muted: #394a54;            /* secondary text */
+  --accent: #494b47;         /* viridis green */
+  --accent-2: #21918c;         /* viridis teal */
+  --accent-3: #d33f5f;         /* redd-ish highlight */
+  --hero-1: #0b0638;
+  --hero-2: #1f3b66;
+  --link: var(--accent-3);
+  --outline: rgba(60,82,139,0.18);
+  --glass: rgba(255,255,255,0.04);
+  --shadow: 0 8px 24px rgba(2,8,23,0.08);
+  --radius: 12px;
+}
+
+/* Hide native checkbox, style label as floating toggle */
+.theme-toggle-checkbox{
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.theme-toggle-label{
+  position: fixed;
+  right: 20px;
+  top: 18px;
+  z-index: 12000;
+  width: 44px;
+  height: 44px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+  color: var(--text);
+  border: 1px solid var(--outline);
+  cursor: pointer;
+  transition: transform .18s ease, background .18s ease, color .18s ease;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(4px);
+}
+.theme-toggle-label:hover{ transform: translateY(-3px); }
+
+/* Make sure the main site container uses variables */
+.site{
+  background: radial-gradient(1200px 500px at 10% 15%, rgba(94,201,98,0.03), transparent 6%),
+              radial-gradient(1000px 400px at 90% 80%, rgba(33,145,140,0.03), transparent 8%),
+              var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background .3s ease, color .18s ease;
+}
+
 
 *{
     font-family: "Merriweather", serif;
@@ -8,13 +89,19 @@
     text-decoration: none;
     list-style: none;
     scroll-behavior: smooth;
+    box-sizing: border-box;
 }
 body{
     min-height: 100vh;
-    background-color:  #f5f3f7;
+    background-color: var(--bg);
     z-index: -100000;
     position: relative;
+    color: var(--text);
 }
+
+/* =========================
+   Up arrow
+   ========================= */
 .up-arrow{
     width: fit-content;
     height: fit-content;
@@ -23,7 +110,7 @@ body{
     width: 35px;
     height: 35px;
     border-radius: 50%;
-    outline: 3px solid #c430d7;
+    outline: 3px solid var(--outline);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -31,12 +118,18 @@ body{
     right: 12px;
     bottom: 12px;
     cursor: pointer;
+    background: var(--surface);
+    z-index: 11000;
 }
 .up-arrow i{
-    color: #c430d7;
+    color: var(--link);
     font-size: 25px;
     font-weight: 700;
 }
+
+/* =========================
+   Header / Navbar
+   ========================= */
 header{
     height: 80px;
     display: flex;
@@ -44,15 +137,16 @@ header{
     align-items: center;
     padding: 0px 20px; 
     z-index: 10000;
+    background: transparent;
 }
 header .logo{
-    color: #000429;
+    color: var(--text);
     font-size: 28px;   
     font-weight: 700;
     animation: logo 1s ease forwards;
 }
 header .logo span{
-    color: #c430d7;
+    color: var(--accent-3);
 }
 header ul{
     width: 60%;
@@ -63,7 +157,7 @@ header ul{
 }
 header ul .menu{
     display: inline-block;
-    color: #000429;
+    color: var(--text);
     font-size: 18px;
     font-weight: 600;
     animation: navbar 0.5s ease forwards;
@@ -72,13 +166,13 @@ header ul .menu{
     transition: 0.5s;
 }
 header ul .menu:hover{
-    color: #c430d7;
+    color: var(--link);
 }
 header ul .menu::before{
     content: '';
     width: 100%;
     height: 1.75px;
-    background-color: #c430d7;
+    background-color: var(--link);
     position: absolute;
     left: 0;
     bottom: -5px;
@@ -109,79 +203,62 @@ header ul .menu:hover::before{
         opacity: 1;
     }
 }
-header ul button{
-    background-color: #c430d7;
-    padding: 6px;
-    border: none;
-    outline: none;
-    border-radius: 25px 0px 25px 0px;
-    animation: btn 0.5s forwards ease;
-    transition: 0.5s;
-}
-header ul button:hover{
-    border-radius: 25px;
-}
-header ul button a{
-    color: #000429;
-    font-size: 18px;
-    font-weight: 600;
-}
-@keyframes  btn{
-    0%{
-        transform: translateX(40px);
-        opacity: 0;
-    }
-    100%{
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
+
+/* =========================
+   Section 1 —  Intro
+   ========================= */
 .section1{
     width: 100%;
     height: 700px;
     display: flex;
     justify-content: center;
+    align-items: center; /* vertical centering */
 }
 .section1 .container1{
     width: 90%;
     height: 700px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    padding: 28px;
+    box-shadow: var(--shadow);
+    gap: 40px; /* space between image & text */
 }
 .section1 .container1>div{
     width: 49%;
     height: 600px;
 }
 .section1 .container1 .content1{
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 25px;
+    align-items: flex-start;  /* align text to left edge */
+    text-align: left; /* keep normal paragraph alignment */
 }
 .section1 .container1 .content1 h3{
-    color: #000429;
-    font-size: 35px;
+    color: var(--text);
+    font-size: 25px;
 }
 .section1 .container1 .content1 h1{
-    color: #000429;
-    font-family: "Montserrat", sans-serif;
+    color: var(--text);
+    font-family: "Merriweather", serif;
     font-size: 55px;
-    position: relative;
     transition: 0.5s;
 }
 
 .section1 .container1 .content1 h2{
-    color: #000429;
+    color: var(--text);
     font-size: 40px;
 }
 .section1 .container1 .content1 h2>span{
-    color: #c430d7;
+    color: var(--accent-3);
     font-size: 40px;
-    font-family: "Montserrat", sans-serif;
+    font-family: "Merriweather", serif;
 }
 .section1 .container1 .content1 p{
-    color: #000429;
+    color: var(--text);
     font-size: 20px;
     font-weight: 500;
 }
@@ -196,20 +273,20 @@ header ul button a{
     justify-content: space-around;
 }
 .section1 .container1 .content1 .icons>div{
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    outline: 2px solid #c430d7;
+    outline: 2px solid var(--accent-3);
     cursor: pointer;
     transition: 0.5s;
-
+    background: var(--surface);
 }
 .section1 .container1 .content1 .icons>div i{
-    color: #c430d7;
-    font-size: 20px;
+    color: var(--accent-3);
+    font-size: 30px;
     font-weight: 500;
     transition: 0.5s;
 }
@@ -218,6 +295,7 @@ header ul button a{
 }
 
 .section1 .container1 .image1{
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -228,6 +306,8 @@ header ul button a{
     animation-duration: 3s;
     animation-iteration-count: infinite;
     animation-timing-function: ease-in-out;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
 }
 @keyframes backani {
     0%{
@@ -240,6 +320,10 @@ header ul button a{
         transform: translateY(0);
     }
 }
+
+/* =========================
+   Responsive styles
+   ========================= */
 @media (max-width:900px) {
     header{
         height: 100px;
@@ -294,7 +378,7 @@ header ul button a{
     }
     .section1 .container1 .content1 button{
         display: block;
-        background-color: #c430d7;
+        background-color: var(--accent);
         padding: 6px;
         border: none;
         outline: none;
@@ -303,14 +387,19 @@ header ul button a{
         transition: 0.5s;
     }
     .section1 .container1 .content1 button:hover{
-        border-radius: 25px;
+        border-radius: 40px;
     }
     .section1 .container1 .content1 button a{
-        color: #000429;
+        color: var(--accent-1);
         font-size: 18px;
         font-weight: 600;
     }
 }
+
+/* =========================
+   Section 2 — About
+   ========================= */
+
 .section2{
     width: 100%;
     height: 650px;
@@ -321,6 +410,9 @@ header ul button a{
     margin: auto;
     display: flex;
     flex-direction: column;
+    justify-content: center;   /* vertical centering */
+    align-items: center;       /* horizontal centering */
+    text-align: center;        /* centers text */
 }
 .section2 .container2 .title1{
     width: 100%;
@@ -332,10 +424,10 @@ header ul button a{
 .section2 .container2 .title1 h2{
     font-size: 45px;
     font-weight: 10000;
-    color: #000429;
+    color: var(--text);
 }
 .section2 .container2 .title1 h2 span{
-    color: #c430d7;
+    color: var(--accent-3);
 }
 .section2 .container2 .image2{
     width: 100%;
@@ -359,7 +451,7 @@ header ul button a{
     display: flex;
     justify-content: center;
     align-items: center;
-    outline: 2px solid #c430d7;
+    outline: 2px solid var(--outline);
     border-radius: 50%;
     background-image: url('profile_square.webp');
     background-repeat: no-repeat;
@@ -376,8 +468,8 @@ header ul button a{
     border-radius: 50%;
     border-top: solid transparent 2px;
     border-bottom: solid transparent 2px;
-    border-left: solid #c430d7 2px;
-    border-right: solid #c430d7 2px;
+    border-left: solid var(--accent-3) 2px;
+    border-right: solid var(--accent-3) 2px;
     animation: circl linear 8s infinite;
 } 
 @keyframes circl {
@@ -385,24 +477,27 @@ header ul button a{
         transform: translate(-50%,-50%) rotate(360deg);
     }
 }
+
 .section2 .container2 .content2{
+    max-width: 1200px;          /* limit width for readability */
     width: 100%;
     height: 250px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+    text-align: center;
 }
 .section2 .container2 .content2 h3{
-    color: #000429;
+    color: var(--text);
     font-size: 35px;
 }
 .section2 .container2 .content2 h3 span{
-    color: #c430d7;
+    color: var(--accent-3);
     font-size: 35px;
 }
 .section2 .container2 .content2 p{
-    color: #000429;
+    color: var(--text);
     font-size: 18px;
     font-weight: 500;
     padding: 0px 15px;
@@ -421,24 +516,25 @@ header ul button a{
     z-index: 1000000;
     position: relative;
     transition: 0.5s;
+    background: transparent;
 }
 .section2 .container2 .content2 .bttn button a{
-    color: #000429;
+    color: var(--text);
     font-size: 20px;
     font-weight: 500;
 }
 
 .section2 .container2 .content2 .bttn .btn1{
-    outline: 2px solid #c430d7;
+    outline: 2px solid var(--accent-3);
 }
 .section2 .container2 .content2 .bttn .btn2{
-    outline: 2px solid #c430d7;
+    outline: 2px solid var(--accent-3);
 }
 .section2 .container2 .content2 .bttn .btn1::before{
     content: '';
     width: 100%;
     height: 100%;
-    background-color: #c430d7;
+    background-color: var(--accent-3);
     position: absolute;
     top: 0;
     left: 0;
@@ -455,7 +551,7 @@ header ul button a{
     content: '';
     width: 100%;
     height: 100%;
-    background-color: #c430d7;
+    background-color: var(--accent-3);
     position: absolute;
     top: 0;
     left: 0;
@@ -484,6 +580,10 @@ header ul button a{
         height: 400px;
     }
 }
+
+/* =========================
+   Section 3 — Education / Career
+   ========================= */
 .section3{
     width: 100%;
     height: 850px;
@@ -502,12 +602,12 @@ header ul button a{
     align-items: end;
 }
 .section3 .container3 .title2 h2{
-    color: #000429;
+    color: var(--text);
     font-size: 45px;
     font-weight: 10000;
 }
 .section3 .container3 .title2 h2 span{
-    color: #c430d7;
+    color: var(--accent-3);
 }
 .section3 .container3 .content3{
     width: 100%;
@@ -530,13 +630,13 @@ header ul button a{
     align-items: center;
 }
 .section3 .container3 .content3>div .soutitle2-1,.soutitle2-2 h3{
-    color: #000429;
+    color: var(--text);
     font-size: 25px;
 }
 .section3 .container3 .content3>div .parentpart1,.parentpart2{
     width: calc(100%-3px);
     height: 600px;
-    border-left: 2px #c430d7 solid;
+    border-left: 2px var(--accent-3) solid;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -545,26 +645,28 @@ header ul button a{
 .section3 .container3 .content3>div .parentpart1>div{
     width: 95%;
     height: 180px;
-    outline: 2px solid #c430d7;
+    outline: 2px solid var(--outline);
     border-radius: 15px;
     z-index: 100000;
     position: relative;
     cursor: pointer;
+    background: var(--surface);
 }
 .section3 .container3 .content3>div .parentpart2>div{
     width: 95%;
     height: 180px;
-    outline: 2px solid #c430d7;
+    outline: 2px solid var(--outline);
     border-radius: 15px;
     z-index: 10000;
     position: relative;
     cursor: pointer;
+    background: var(--surface);
 }
 .section3 .container3 .content3>div .parentpart1>div::before{
     content: '';
     width: 20px;
     height: 20px;
-    background-color: #c430d7;
+    background-color: var(--accent-3);
     border-radius: 50%;
     position: absolute;
     top: 0;
@@ -574,7 +676,7 @@ header ul button a{
     content: '';
     width: 20px;
     height: 20px;
-    background-color: #c430d7;
+    background-color: var(--accent-3);
     border-radius: 50%;
     position: absolute;
     top: 0;
@@ -594,7 +696,7 @@ header ul button a{
     content: '';
     width: 100%;
     height: 100%;
-    background-color: rgba(195, 48, 215, 0.297);
+    background-color: rgba(155,63,211,0.297); /* magenta overlay */
     position: absolute;
     top: 0;
     left: 0;
@@ -611,7 +713,7 @@ header ul button a{
     content: '';
     width: 100%;
     height: 100%;
-    background-color: rgba(195, 48, 215, 0.297);
+    background-color: rgba(155,63,211,0.297);
     position: absolute;
     top: 0;
     left: 0;
@@ -629,7 +731,7 @@ header ul button a{
 }
 .section3 .container3 .content3>div .content #title{
     margin-top: 15px;
-    color: #c430d7;
+    color: var(--accent-3);
     font-size: 18px;
     border-radius: 15px 15px 0px 0px;
 }
@@ -637,11 +739,11 @@ header ul button a{
     margin-left: 7px;
 }
 .section3 .container3 .content3>div .content h3{
-    color: #000429;
+    color: var(--text);
     font-size: 22px;
 }
 .section3 .container3 .content3>div .content .text{
-    color: #000429;
+    color: var(--text);
     font-weight: 500;
 }
 @media (max-width:900px) {
@@ -670,6 +772,10 @@ header ul button a{
         left: -24px;
     }
 }
+
+/* =========================
+   Section 4 — Skills
+   ========================= */
 .section4{
     width: 100%;
     height: 620px;
@@ -690,12 +796,12 @@ header ul button a{
     align-items: center;
 }
 .section4 .container4 .title3 h2{
-    color: #000429;
+    color: var(--text);
     font-size: 45px;
     font-weight: 100000;
 }
 .section4 .container4 .title3 h2 span{
-    color: #c430d7;
+    color: var(--accent-3);
 }
 .section4 .container4 .content4{
     width: 100%;
@@ -707,7 +813,7 @@ header ul button a{
 .section4 .container4 .content4>div{
     width: 48%;
     height: 430px;
-    outline: solid 2.5px #c430d7;
+    outline: solid 2.5px var(--outline);
     display: flex;
     flex-direction: column;
     border-radius: 15px;
@@ -715,6 +821,7 @@ header ul button a{
     z-index: 10000;
     overflow: hidden;
     position: relative;
+    background: var(--surface);
 }
 .section4 .container4 .content4 .skills-part{
     width: 100%;
@@ -732,12 +839,12 @@ header ul button a{
     align-items: center;
 }
 .section4 .container4 .content4 .skills-part .soutitle3 h3{
-    color: #000429;
+    color: var(--text);
 }
 .section4 .container4 .content4 .skills-part .ratio{
     width: 95%;
     height: 20px;
-    outline: #c430d7 2px solid;
+    outline: var(--outline) 2px solid;
     border-radius: 5px;
     padding: 3px;
 }
@@ -745,63 +852,63 @@ header ul button a{
     display: block;
     width: 90%;
     height: 100%;
-    background-color: #c430d7;
+    background: linear-gradient(90deg, var(--accent-3) 0%, var(--accent) 60%);
     border-radius: 5px;
 }
 .section4 .container4 .content4 .skills-part .ratio .span2{
     display: block;
     width: 75%;
     height: 100%;
-    background-color: #c430d7;
+    background: linear-gradient(90deg, var(--accent-3) 0%, var(--accent) 60%);
     border-radius: 5px;
 }
 .section4 .container4 .content4 .skills-part .ratio .span3{
     display: block;
     width: 60%;
     height: 100%;
-    background-color: #c430d7;
+    background: linear-gradient(90deg, var(--accent-3) 0%, var(--accent) 60%);
     border-radius: 5px;
 }
 .section4 .container4 .content4 .skills-part .ratio .span4{
     display: block;
-    width: 45%;
+    width: 80%;
     height: 100%;
-    background-color: #c430d7;
+    background: linear-gradient(90deg, var(--accent-3) 0%, var(--accent) 60%);
     border-radius: 5px;
 }
 .section4 .container4 .content4 .skills-part .ratio .span5{
     display: block;
     width: 90%;    
     height: 100%;
-    background-color: #c430d7;
+    background: linear-gradient(90deg, var(--accent-3) 0%, var(--accent) 60%);
     border-radius: 5px;
 }
 .section4 .container4 .content4 .skills-part .ratio .span6{
     display: block;
     width: 75%;
     height: 100%;
-    background-color: #c430d7;
+    background: linear-gradient(90deg, var(--accent-3) 0%, var(--accent) 60%);
     border-radius: 5px;
 }
 .section4 .container4 .content4 .skills-part .ratio .span7{
     display: block;
-    width: 55%;
+    width: 75%;
     height: 100%;
-    background-color: #c430d7;
+    background: linear-gradient(90deg, var(--accent-3) 0%, var(--accent) 60%);
     border-radius: 5px;
 }
 .section4 .container4 .content4 .skills-part .ratio .span8{
     display: block;
     width: 80%;
     height: 100%;
-    background-color: #c430d7;
+    background: linear-gradient(90deg, var(--accent-3) 0%, var(--accent) 60%);
     border-radius: 5px;
 }
 .section4 .container4 .content4 .soucontent4-1::before{
     content: '';
     width: 100%;
     height: 100%;
-    background-color: rgba(195, 48, 215, 0.197);
+    background-color: rgba(155,63,211,0.197);
     position: absolute;
     top: 0;
     left: 0;
@@ -818,7 +925,7 @@ header ul button a{
     content: '';
     width: 100%;
     height: 100%;
-    background-color: rgba(195, 48, 215, 0.197);
+    background-color: rgba(155,63,211,0.197);
     position: absolute;
     top: 0;
     left: 0;
@@ -851,6 +958,10 @@ header ul button a{
         width: 90%;
     }
 }
+
+/* =========================
+   Section 5 — Contact
+   ========================= */
 .section5{
     width: 100%;
     height: 600px;
@@ -872,12 +983,12 @@ header ul button a{
     align-items: center;
 }
 .section5 .container5 .title4 h2{
-    color: #000429;
+    color: var(--text);
     font-size: 45px;
     font-weight: 1000;
 }
 .section5 .container5 .title4 h2 span{
-    color: #c430d7;
+    color: var(--accent-3);
 }
 .section5 .container5 .content5{
     width: 100%;
@@ -910,9 +1021,9 @@ header ul button a{
     border: none;
     padding: 5px 10px;
     border-radius: 5px;
-    outline: solid #c430d7 2px;
+    outline: solid var(--outline) 2px;
     background-color: transparent;
-    color: #000429;
+    color: var(--text);
     font-size: 18px;
     font-weight: 500;
     overflow: hidden;
@@ -920,7 +1031,8 @@ header ul button a{
     position: relative;
 }
 .section5 .container5 .content5 form input::placeholder{
-    color: #0004299f;
+    color: var(--muted);
+    opacity: 0.9; /* between 0.6 - 1.0 */
 }
 .section5 .container5 .content5 form .souform3{
     height: 160px;
@@ -931,13 +1043,13 @@ header ul button a{
 .section5 .container5 .content5 form .souform3 textarea{
     min-width: 98%;
     height: 70%;
-    color: #000429;
+    color: var(--text);
     font-size: 18px;
     font-weight: 500;
     background-color: transparent;
     padding: 5px 10px;
     outline: none;
-    outline: 2px solid #c430d7;
+    outline: 2px solid var(--outline);
     border-radius: 5px;
     border: none;
     overflow: hidden;
@@ -945,7 +1057,8 @@ header ul button a{
     position: relative;
 }
 .section5 .container5 .content5 form .souform3 textarea::placeholder{
-    color: #0004299f;
+    color: var(--muted);
+    opacity: 0.9; /* between 0.6 - 1.0 */
 }
 .section5 .container5 .content5 form .souform4{
     height: 80px;
@@ -956,12 +1069,47 @@ header ul button a{
 
 .section5 .container5 .content5 form .souform4 .btn{
     width: 180px;
-    color: #f5f3f7;
+    color: var(--bg);
     font-size: 18px;
     font-weight: 600;
-    background-color: #c430d7;
+    background: linear-gradient(90deg, var(--accent-2), var(--accent));
     cursor: pointer;
+    border: none;
+    border-radius: 8px;
 }
+
+
+
+/* =========================
+   Misc / Utilities
+   ========================= */
+a, a:visited{
+  color: var(--link);
+}
+a:hover{
+  color: var(--accent);
+}
+.btn{
+  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  color: var(--bg);
+  border-radius: 8px;
+  padding: 8px 12px;
+  border: none;
+}
+
+/* small utility shadows and outlines */
+.section3 .container3 .content3>div .parentpart1>div,
+.section3 .container3 .content3>div .parentpart2>div,
+.section4 .container4 .content4>div{
+  box-shadow: var(--shadow);
+}
+
+/* ensure theme-toggle label changes color with theme */
+.theme-toggle-label{ color: var(--text); }
+
+/* =========================
+   Additional responsive tweaks repeated from original
+   ========================= */
 @media (max-width: 1100px) {
     .section5{
         width: 100%;
@@ -998,4 +1146,12 @@ header ul button a{
     .section5 .container5 .content5 form>div input{
         width: 40%;
     }
+}
+.section1 .container1 .content1 h1,
+.section1 .container1 .content1 h2,
+.section1 .container1 .content1 h3,
+.section1 .container1 .content1 p {
+  margin: 0;                /* reset default margins */
+  padding: 0;               /* reset padding */
+  text-align: left;         /* force consistent left edge */
 }
