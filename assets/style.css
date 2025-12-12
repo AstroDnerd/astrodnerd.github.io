@@ -16,7 +16,7 @@
   --glass-bg: rgba(15, 23, 42, 0.6);
   --glass-border: rgba(255, 255, 255, 0.1);
   --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-  --line-color: #334155;
+  --line-color: #2e4058;
   --font-heading: 'Montserrat', sans-serif;
   --font-body: 'Merriweather', serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -320,6 +320,9 @@ h2::after {
   scrollbar-width: none; 
   -ms-overflow-style: none;
   cursor: grab;
+  background: var(--accent-glow);
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
 }
 .timeline-wrapper::-webkit-scrollbar { display: none; }
 .timeline-wrapper:active { cursor: grabbing; }
