@@ -1,264 +1,778 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset='UTF-8'>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name='keywords' content='portfolio, astrophysics, molecular clouds, turbulence, fluid dynamics, magnetohydrodynamics, machine learning, ai, convolutional network '>
-    <meta name='description' content='Personal website of Nikhil Bisht, a grad student working on solving the mysteries of the universe by training state-of-the-art ML models to forecast turbulence using MHD simulations.'>
-    <meta name='subject' content='your websites subject'>
-    <meta name='language' content='EN'>
-    <meta name='robots' content='index,follow'>
-    <meta name='revised' content='Monday, July 21st, 2025, 5:15 pm'>
-    <meta name='author' content='Nikhil Bisht, nikhilbisht65@gmail.com'>
-    <meta name='owner' content='Nikhil Bisht, nikhilbisht65@gmail.com'>
-    <meta name='url' content='http://www.astrodnerd.com'>
-    <title>Nikhil Bisht</title>
-    <link rel="stylesheet" href="assets/style.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Link to your CSS file -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nikhil Bisht | Data Scientist & Researcher</title>
+    
+    <!-- CSS & Icons -->
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 
-
 <body>
-    <input id="theme-toggle" class="theme-toggle-checkbox" type="checkbox" aria-label="Toggle theme">
-    <label for="theme-toggle" class="theme-toggle-label" title="Toggle light / dark theme">🌙</label>
+    <!-- BACKGROUND CANVAS -->
+    <canvas id="bg-canvas"></canvas>
+    <input type="checkbox" id="theme-toggle" class="theme-toggle-checkbox">
     <div class="site">
-    <!-- Navbar -->
-    <header>
-        <a href="#" class="logo"> <span>Nikhil</span> Bisht</a>
-        <ul> 
-            <li><a href="#home"  class="menu" style="--i:1;">Home</a></li>
-            <li><a href="#about" class="menu" style="--i:2;">About</a></li>
-            <li><a href="#education" class="menu" style="--i:4;">Education</a></li>
-            <li><a href="#skills" class="menu" style="--i:3;">Skills</a></li>
-            <li><a href="#contact" class="menu" style="--i:5;">Contact</a></li>
-            <li><a href="assets/Nikhil_Bisht_CV.pdf"  class = "menu" target="_blank" rel="noopener noreferrer">Download CV</a></li>
-        </ul>
-    </header>
-    <a href="#" id="home" class="arrow">
-        <div class="up-arrow">
-            <i class="fa-solid fa-angle-up"></i>
-        </div>
-    </a>
-    <!-- Home -->
-    <section class="section1" id="home">
-        <div class="container1">
-            <div class="image1">
-                <!-- keep your profile image path -->
-                <img
-                    src="assets/profile.webp"
-                    alt="A smiling Nikhil in Germany."
-                    class="profile-pic"
-                />
-            </div>   
-            <div class="content1">
-                <h3>Hi, I'm</h3>
+        
+        <!-- HEADER -->
+        <header>
+            <div class="logo">
+                <a href="#"><span>N</span>B</a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#timeline">Timeline</a></li>
+                    <li><a href="#projects">Work</a></li>
+                    <li><a href="#skills">Stack</a></li>
+                    <li><a href="personal.html" style="color: var(--accent);">to the Flipside></a></li>
+                </ul>
+            </nav>
+            <label for="theme-toggle" class="theme-toggle-label">
+                <i class="fa-solid fa-moon"></i>
+                <i class="fa-solid fa-sun"></i>
+            </label>
+        </header>
+
+        <!-- HERO SECTION -->
+        <section class="hero" id="home">
+            <div class="container">
+                <h2>Hi! I am </h2>
                 <h1>Nikhil Bisht</h1>
-                <h2>PhD Candidate, Dept. of <strong><a href="https://astrophysics.physics.fsu.edu/" target="_blank">Physics</a></strong>, Florida State University</h2>
-                <h3>I am developing physics-aware deep learning models using 3D magnetohydrodynamic simulations of collapsing molecular clouds to predict star formation</h3>
-                <div class="icons">
-                    <div class="icon1"><a href="https://www.linkedin.com/in/nikhilbisht65" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div>  
-                    <div class="icon2"><a href="https://www.facebook.com/" target="_blank"><i class="fa-brands fa-facebook-f"></i></a></div>  
-                    <div class="icon3"><a href="https://twitter.com/" target="_blank"><i class="fa-brands fa-x-twitter"></i></a></div>  
-                    <div class="icon4"><a href="https://github.com/AstroDnerd" target="_blank"><i class="fa-brands fa-github"></i></a></div>
-                </div>
-                <button><a href="assets/Nikhil_Bisht_CV.pdf" download>Download CV</a></button>
+                <p>I am a Data Scientist & a </p>
+                <p><span class="var-text"></span></p>
             </div>
-        </div>
-    </section>
+             <!-- My Hero Image / Avatar -->
+            <div class="hero-img">
+                <!-- TODO: Replace with a professional headshot, not a selfie -->
+                <img src="assets/profile.webp" alt="Nikhil Bisht">
+            </div>
+        </section>
 
-    <!-- About -->
-    <section class="section2" id="about">
-        <div class="container2">
-            <div class="title1">
-                <h2> <span>About </span> Me</h2>
-            </div>
-            <div class="image2">
-                <div class="parentrotate">
-                    <div class="iconimg"></div>
-                    <span class="rotate"></span>
+        <!-- ABOUT SECTION -->
+        <section id="about" class="section-pad-small">
+            <div class="container">
+                <div class="glass-panel">
+                    <h2>About Me</h2>
+                    <p style="font-size: 1.1rem; margin-bottom: 20px;">
+                        I am a <strong>PhD Candidate in Physics</strong> at Florida State University, specializing in 
+                        <strong>Deep Learning</strong> and <strong>Computational Astrophysics</strong>.
+                    </p>
+                    <div class="architecture-diagram">
+    
+                        <div class="arch-step">
+                            <div class="arch-icon"><i class="fa-brands fa-sith"></i></div>
+                            <h4>Physics Simulations</h4>
+                            <p>Stochastic 3D Multi-Field Systems</p>
+                        </div>
+
+                        <div class="arch-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+
+                        <div class="arch-step">
+                            <div class="arch-icon"><i class="fa-solid fa-server"></i></div>
+                            <h4>HPC / ETL</h4>
+                            <p>Distributed Pipelines</p>
+                        </div>
+
+                        <div class="arch-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+
+                        <div class="arch-step">
+                            <div class="arch-icon"><i class="fa-solid fa-brain"></i></div>
+                            <h4>Deep Learning</h4>
+                            <p>ConvGRU Architectures</p>
+                        </div>
+
+                        <div class="arch-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+
+                        <div class="arch-step">
+                            <div class="arch-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                            <h4>Analysis</h4>
+                            <p>Forecasting Turbulence</p>
+                        </div>
+                    </div>
+                    <p>
+                        My work bridges the gap between theoretical physics and production-grade software engineering. 
+                        I build end-to-end ML pipelines for terabyte-scale 3D simulations, optimize code for HPC environments, 
+                        and develop novel architectures to solve complex spatiotemporal problems.
+                        Whether it's forecasting molecular cloud collapse or optimizing distributed ETL pipelines, I thrive 
+                        where data is massive, noisy, and physically constrained. 
+                    </p>
+                    <p>     
+                        For my current work, I developed a multi-field
+                        fully 3D convGRU-UNet architecture to predict turbulent flows in star-forming regions (learn more about 
+                        the project <a href="project1_sim_collapse.html" style="color: var(--accent);"> here</a></li> ).
+                    </p>
+                    <div class="model-chart-wrapper">
+                        <p class="chart-caption">Fig 1. My Hybrid ConvGRU-UNet Architecture</p>
+                        <div class="img-container">
+                            <img src="assets/UNet3level_chart.png" alt="Detailed Model Architecture Diagram" class="zoom-img">
+                        </div>
+                    </div>
+                    <div style="margin-top: 30px;">
+                        <a href="assets/Bisht_Nikhil_Industry_CV.pdf" target="_blank" class="email-link" style="display:inline-block; font-size:1rem; border:1px solid var(--accent); padding:10px 20px; border-radius:4px;">Download Resume <i class="fa-solid fa-download"></i></a>
+                    </div>
                 </div>
             </div>
-            <div class="content2">
-                <p>
-                    I'm a computational astrophysicist studying how turbulence and magnetic fields govern the collapse of molecular clouds and set the stage for star formation. My work couples high-resolution magnetized and turbulent cloud collapse simulations
-                    using the code <strong><a href="https://enzo-project.org/" target="_blank">ENZO</a></strong> with spatiotemporal machine learning models to forecast where and when dense, gravitationally bound cores appear. 
-                    With a background in Computer Science and Physics, I sit at the intersection of numerical hydrodynamics and data-driven modeling and am interested in both academic collaborations and industry research opportunities in hydrodynamics or 
-                    machine learning.
+        </section>
+
+        <!-- TIMELINE SECTION (Side Scrolling) -->
+        <section id="timeline" class="section-pad-small">
+            <div class="container">
+                <h2>My Timeline so far</h2>
+                <div class="timeline-wrapper" id="timelineWrapper">
+                    <div class="timeline-track">
+                        
+                        <!-- PhD FSU -->
+                        <div class="timeline-item">
+                            <div class="t-dot"></div>
+                            <div class="t-content">
+                                <span class="t-date">Nov 2022 - Present</span>
+                                <h3 class="t-role">Data Scientist, Graduate Research Fellow</h3>
+                                <div class="t-company">Dept. of Physics, Florida State University</div>
+                                <p class="t-desc">Architecting 3D Spatiotemporal forecasting models (ConvGRU-UNet). 
+                                    Engineered distributed ETL pipelines for HDF5/Parquet, reducing training time from weeks to days via Multi-GPU DDP.</p>
+                                <div class="t-tags">
+                                    <span class="t-tag">PyTorch</span>
+                                    <span class="t-tag">HPC</span>
+                                    <span class="t-tag">3D Vision</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BNN BITS Goa -->
+                        <div class="timeline-item">
+                            <div class="t-dot"></div>
+                            <div class="t-content">
+                                <span class="t-date">Jul 2020 - Aug 2022</span>
+                                <h3 class="t-role">Applied Physics & ML Engineer</h3>
+                                <div class="t-company">BITS Pilani, Goa</div>
+                                <p class="t-desc">Designed Bayesian Neural Networks (BNN) for multi-target probabilistic regression, successfully modeling 
+                                    high-dimensional non-linear relationships with quantified uncertainty intervals</p>
+                                <div class="t-tags">
+                                    <span class="t-tag">Python</span>
+                                    <span class="t-tag">Nuclear Astrophysics</span>
+                                    <span class="t-tag">Bayesian Statistics</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project RT -->
+                        <div class="timeline-item">
+                            <div class="t-dot"></div>
+                            <div class="t-content">
+                                <span class="t-date">Mar 2018 - July 2022</span>
+                                <h3 class="t-role">Lead Engineer (Computer Science Vertical)</h3>
+                                <div class="t-company">Project Radio Telescope</div>
+                                <p class="t-desc">Founded and led a cross-functional engineering team of 10+ to build a full-stack instrumentation facility. 
+                                    Developed Python-based automated signal processing pipelines for real-time spectral analysis and noise reduction.</p>
+                                <div class="t-tags">
+                                    <span class="t-tag">Arduino</span>
+                                    <span class="t-tag">Astronomy</span>
+                                    <span class="t-tag">Python</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- TNG -->
+                        <div class="timeline-item">
+                            <div class="t-dot"></div>
+                            <div class="t-content">
+                                <span class="t-date">August 2021 - July 2022</span>
+                                <h3 class="t-role">Data Analyst</h3>
+                                <div class="t-company">Max Planck Institute for Astronomy, Heidelberg</div>
+                                <p class="t-desc">Investigated a statistically significant sample of Milky-Way/M31 analogs in 
+                                    TNG-5O, a set of large, cosmological magnetohydrodynamic galaxy simulations to quantify stellar Radial Migration.</p>
+                                <div class="t-tags">
+                                    <span class="t-tag">Python</span>
+                                    <span class="t-tag">Time Series Analysis</span>
+                                    <span class="t-tag">Inferential Statistics</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Physoc-->
+                        <div class="timeline-item">
+                            <div class="t-dot"></div>
+                            <div class="t-content">
+                                <span class="t-date">Mar 2019 - July 2021</span>
+                                <h3 class="t-role">Coordinator</h3>
+                                <div class="t-company">Physics Association, BITS Pilani, Goa</div>
+                                <p class="t-desc">Planned the logistics for meetings, conferences, seminars, lectures, and workshops. 
+                                    Served as the central point of contact and liaison between students, faculty and staff.</p>
+                                <div class="t-tags">
+                                    <span class="t-tag">Communication</span>
+                                    <span class="t-tag">Organizational</span>
+                                    <span class="t-tag">Management </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SEDS-->
+                        <div class="timeline-item">
+                            <div class="t-dot"></div>
+                            <div class="t-content">
+                                <span class="t-date">Mar 2018 - April 2019</span>
+                                <h3 class="t-role">Secretary</h3>
+                                <div class="t-company">Students for Exploration & Development of Space, Celestia</div>
+                                <p class="t-desc">Worked towards promoting space exploration through projects, conferences, and career development for students.</p>
+                                <div class="t-tags">
+                                    <span class="t-tag">Scientific Communication</span>
+                                    <span class="t-tag">Project Management</span>
+                                    <span class="t-tag">Organizational </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p style="text-align: center; font-size: 0.8rem; opacity: 0.6; margin-top: 10px;">
+                    <i class="fa-solid fa-arrows-left-right"></i> Scroll to explore history
                 </p>
-                <p>
-                    When I'm not training models or running simulations I spend with my cats and chickens, chase the night sky with astrophotography, and go exploring in the real world by biking, hiking, and camping whenever I can or in the fantasy world by 
-                    running DnD campaigns.
-                </p>
-                <div class="bttn">
-                    <button class="btn1"><a href="#contact">Contact Me</a></button>
-                    <button class="btn2"><a href="https://github.com/AstroDnerd" target="_blank">My projects</a></button>
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION -->
+        <section id="projects" class="section-pad-small">
+            <div class="container">
+                <h2>Selected Projects</h2>
+                <div class="project-grid">
+                    
+                    <!-- Project 1 -->
+                    <a href="project1_sim_collapse.html" class="project-card">
+                        <div class="p-img-box">
+                            <img src="assets/sim_suite.webp" alt="SimSuite">
+                        </div>
+                        <div class="p-info">
+                            <h3>Forecasting Molecular Cloud Collapse</h3>
+                            <p>Coupling high-resolution ENZO MHD simulations with 3D Deep Learning to predict star formation sites.</p>
+                            <div class="p-stack">Python • PyTorch • ENZO • Parquet</div>
+                        </div>
+                    </a>
+
+                    <!-- Project 2 (Placeholder Link) -->
+                    <a href="#" class="project-card">
+                        <div class="p-img-box">
+                            <img src="https://www.scaler.com/topics/images/tensorflow-probability-bayesian-neural-network-1.webp" alt="BNNViz">
+                        </div>
+                        <div class="p-info">
+                            <h3>Inferencing Neutron Star parameters using BNNs</h3>
+                            <p>Statistical modeling of spectroscopic data to confirm Dark Matter halos in cluster galaxies using MCMC.</p>
+                            <div class="p-stack">SciPy • Statistics • Modeling</div>
+                        </div>
+                    </a>
+
+                    <!-- Project 3 (Placeholder Link) -->
+                    <a href="#" class="project-card">
+                        <div class="p-img-box">
+                            <img src="https://www.tng-project.org/static/tng/images/figure_tng50_example_galaxies_z1z2.jpg" alt="TNG50galaxy">
+                        </div>
+                        <div class="p-info">
+                            <h3>Quantifying Stellar Radial Migration in MW-like galaxies</h3>
+                            <p>C++ engine solving Einstein's field equations to render photon trajectories near Kerr black holes.</p>
+                            <div class="p-stack">C++ • Numerical Methods • Physics</div>
+                        </div>
+                    </a>
+
+                    <!-- Project 4 (Placeholder Link) -->
+                    <a href="#" class="project-card">
+                        <div class="p-img-box">
+                            <img src="https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fnature.2016.19441/MediaObjects/41586_2016_Article_BFnature201619441_Figa_HTML.jpg" alt="RT">
+                        </div>
+                        <div class="p-info">
+                            <h3>Project Radio Telescope</h3>
+                            <p>C++ engine solving Einstein's field equations to render photon trajectories near Kerr black holes.</p>
+                            <div class="p-stack">C++ • Numerical Methods • Physics</div>
+                        </div>
+                    </a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Education / Career -->
-    <section class="section3" id="education">
-        <div class="container3">
-            <div class="title2">
-                <h2>My <span>Career</span> </h2>
+        <!-- TECH STACK SECTION (D3) -->
+        <section id="skills" class="section-pad-big">
+            <div class="container">
+                <h2>Technical Arsenal</h2>
+                <p style="margin-bottom: 20px;">An interactive map of my production capabilities.</p>
+                <div id="graph-container"></div>
+                <div class="d3-tooltip" id="d3-tooltip"></div>
+                <script>
+                    // --- 1. CONFIGURATION & ASSETS ---
+
+                    // Icon Mappings (Using DevIcon hosted SVG URLs)
+                    const iconMap = {
+                        "Python": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+                        "C++": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg",
+                        "Bash": "https://i.redd.it/a3s16nut3ylc1.png",
+                        "SQL": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg", // Using Postgres for SQL
+                        "PyTorch": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg",
+                        "TensorFlow": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg",
+                        "Pandas": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg",
+                        "NumPy": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg",
+                        "Scikit-Learn": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scikitlearn/scikitlearn-original.svg",
+                        "Docker": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
+                        "Git": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg",
+                        "Linux": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg",
+                        "Jupyter": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original.svg",
+                        "CUDA": "https://d29g4g2dyqv443.cloudfront.net/sites/default/files/pictures/2019/NVIDIACuda_Logo.jpg",
+                        "Ubuntu": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ubuntu/ubuntu-plain.svg"
+                    };
+
+                    // Data Definition
+                    // Groups: 1:Lang, 2:ML, 3:HPC, 4:DevOps, 5:CS
+                    const categories = [
+                        { id: "Languages", group: 1, val: 65, type: "Category" },
+                        { id: "ML", group: 2, val: 65, type: "Category" },
+                        { id: "HPC", group: 3, val: 65, type: "Category" },
+                        { id: "DevOps", group: 4, val: 65, type: "Category" },
+                        { id: "Comp Sci", group: 5, val: 65, type: "Category" }
+                    ];
+
+                    const skills = [
+                        // Languages
+                        { id: "Python", group: 1, val: 45, icon: iconMap["Python"] },
+                        { id: "C++", group: 1, val: 40, icon: iconMap["C++"] },
+                        { id: "SQL", group: 1, val: 30, icon: iconMap["SQL"] },
+                        { id: "Bash", group: 1, val: 28, icon: iconMap["Bash"] },
+                        { id: "Memory Mgmt", group: 1, val: 18 },
+                        { id: "STL", group: 1, val: 18 },
+
+                        // ML
+                        { id: "PyTorch", group: 2, val: 42, icon: iconMap["PyTorch"] },
+                        { id: "TensorFlow", group: 2, val: 38, icon: iconMap["TensorFlow"] },
+                        { id: "Pandas", group: 2, val: 30, icon: iconMap["Pandas"] },
+                        { id: "NumPy", group: 2, val: 30, icon: iconMap["NumPy"] },
+                        { id: "Scikit-Learn", group: 2, val: 28, icon: iconMap["Scikit-Learn"] },
+                        { id: "Computer Vision", group: 2, val: 35 },
+                        { id: "Transformers", group: 2, val: 28 },
+                        { id: "XGBoost", group: 2, val: 25 },
+                        { id: "Bayesian", group: 2, val: 22 },
+                        { id: "Time-Series", group: 2, val: 22 },
+
+                        // HPC
+                        { id: "Distributed", group: 3, val: 35 },
+                        { id: "CUDA", group: 3, val: 32, icon: iconMap["CUDA"] },
+                        { id: "MPI", group: 3, val: 25 },
+                        { id: "SLURM", group: 3, val: 22 },
+                        { id: "Dask", group: 3, val: 28 },
+                        { id: "ETL", group: 3, val: 25 },
+                        { id: "Parquet", group: 3, val: 20 },
+
+                        // DevOps
+                        { id: "Docker", group: 4, val: 38, icon: iconMap["Docker"] },
+                        { id: "Git", group: 4, val: 35, icon: iconMap["Git"] },
+                        { id: "Linux", group: 4, val: 32, icon: iconMap["Linux"] },
+                        { id: "CI/CD", group: 4, val: 30 },
+                        { id: "Jupyter", group: 4, val: 25, icon: iconMap["Jupyter"] },
+                        { id: "MLOps", group: 4, val: 28 },
+
+                        // CS
+                        { id: "Algorithms", group: 5, val: 35 },
+                        { id: "CFD", group: 5, val: 30 },
+                        { id: "Octrees", group: 5, val: 22 },
+                        { id: "Monte Carlo", group: 5, val: 25 },
+                        { id: "Numerical", group: 5, val: 25 },
+                        { id: "GDB/Valgrind", group: 5, val: 20 }
+                    ];
+
+                    const nodes = [...categories, ...skills];
+
+                    // Simplified linking strategy: Connect skills to their main Category
+                    const links = [];
+                    skills.forEach(skill => {
+                        const targetId = categories.find(c => c.group === skill.group).id;
+                        links.push({ source: skill.id, target: targetId });
+                    });
+
+                    // Inter-category links (to keep the whole cluster together)
+                    links.push({ source: "Languages", target: "Comp Sci" });
+                    links.push({ source: "Languages", target: "ML" });
+                    links.push({ source: "ML", target: "HPC" });
+                    links.push({ source: "HPC", target: "DevOps" });
+
+                    // --- 2. LAYOUT LOGIC ---
+
+                    const container = document.getElementById('graph-container');
+                    let width = container.clientWidth;
+                    let height = container.clientHeight;
+
+                    // Colors (Pastel/Neon Palette)
+                    // Groups: Lang(Blue), ML(Purple/Pink), HPC(Emerald), DevOps(Orange), CS(Cyan)
+                    const colors = {
+                        1: "#60a5fa", // Blue
+                        2: "#d946ef", // Fuchsia
+                        3: "#34d399", // Emerald
+                        4: "#fb923c", // Orange
+                        5: "#22d3ee"  // Cyan
+                    };
+
+                    // --- 3. D3 SETUP ---
+
+                    const svg = d3.select("#graph-container").append("svg")
+                        .attr("width", width)
+                        .attr("height", height)
+                        .attr("viewBox", [0, 0, width, height]);
+
+                    // Gradient Definitions for visual flare
+                    const defs = svg.append("defs");
+                    
+                    // Create a glow filter
+                    const filter = defs.append("filter")
+                        .attr("id", "glow");
+                    filter.append("feGaussianBlur")
+                        .attr("stdDeviation", "3.5")
+                        .attr("result", "coloredBlur");
+                    const feMerge = filter.append("feMerge");
+                    feMerge.append("feMergeNode").attr("in", "coloredBlur");
+                    feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+
+                    // The Simulation
+                    const simulation = d3.forceSimulation(nodes)
+                        .force("link", d3.forceLink(links).id(d => d.id).distance(70))
+                        .force("charge", d3.forceManyBody().strength(-200)) // Repel
+                        .force("collide", d3.forceCollide().radius(d => d.val + 2).iterations(3)); // Prevent overlap
+
+                    // Function to Calculate Group Foci (Centers of Gravity) based on Screen Size
+                    function getGroupFocus(groupId, w, h) {
+                        // Layout Strategy:
+                        // Desktop: Lang(1), ML(2), HPC(3) Top Row | DevOps(4), CS(5) Bottom Row
+                        // Mobile: Stacked vertically
+                        
+                        if (w > 1000) {
+                            // Wide Screen
+                            const colW = w / 4;
+                            const rowH = h / 3;
+                            switch(groupId) {
+                                case 1: return { x: colW * 1, y: rowH * 0.8 }; // Lang
+                                case 2: return { x: colW * 2, y: rowH * 0.8 }; // ML
+                                case 3: return { x: colW * 3, y: rowH * 0.8 }; // HPC
+                                case 4: return { x: colW * 1.5, y: rowH * 2.0 }; // DevOps
+                                case 5: return { x: colW * 2.5, y: rowH * 2.0 }; // CS
+                            }
+                        } else {
+                            // Narrow/Mobile
+                            const rowH = h / 6;
+                            return { x: w / 2, y: rowH * groupId };
+                        }
+                        return { x: w/2, y: h/2 };
+                    }
+
+                    // Apply Forces
+                    function updateForces() {
+                        width = container.clientWidth;
+                        height = container.clientHeight;
+                        svg.attr("width", width).attr("height", height);
+                        
+                        // Apply custom gravity per group
+                        simulation.force("x", d3.forceX().x(d => getGroupFocus(d.group, width, height).x).strength(0.3));
+                        simulation.force("y", d3.forceY().y(d => getGroupFocus(d.group, width, height).y).strength(0.3));
+                        
+                        simulation.alpha(0.5).restart();
+                    }
+
+                    // --- 4. DRAWING ---
+
+                    const g = svg.append("g");
+
+                    // Links
+                    const link = g.append("g")
+                        .attr("stroke", "#999")
+                        .attr("stroke-opacity", 0.2)
+                        .selectAll("line")
+                        .data(links)
+                        .join("line")
+                        .attr("stroke-width", 1);
+
+                    // Node Group wrapper
+                    const node = g.append("g")
+                        .selectAll("g")
+                        .data(nodes)
+                        .join("g")
+                        .call(drag(simulation));
+
+                    // 1. Circles (Background Bubble)
+                    node.append("circle")
+                        .attr("r", d => d.val)
+                        .attr("fill", d => colors[d.group])
+                        .attr("fill-opacity", 0.15) // Very translucent
+                        .attr("stroke", d => colors[d.group])
+                        .attr("stroke-width", 1.5)
+                        .attr("stroke-opacity", 0.6)
+                        .style("cursor", "pointer")
+                        .style("transition", "all 0.3s ease");
+
+                    // 2. Images (Icons) - Clipped to circle
+                    node.append("clipPath")
+                        .attr("id", d => "clip-" + d.index)
+                        .append("circle")
+                        .attr("r", d => d.val - 4); // Slightly smaller than bubble
+
+                    node.filter(d => d.icon).append("image")
+                        .attr("xlink:href", d => d.icon)
+                        .attr("x", d => -d.val/1.5) // Center image
+                        .attr("y", d => -d.val/1.5)
+                        .attr("width", d => d.val * 1.35)
+                        .attr("height", d => d.val * 1.35)
+                        .attr("clip-path", d => "url(#clip-" + d.index + ")")
+                        .style("pointer-events", "none")
+                        .style("opacity", 0.9);
+
+                    // 3. Text Labels (For nodes WITHOUT icons, or Category nodes)
+                    node.filter(d => !d.icon).append("text")
+                        .text(d => d.id)
+                        .attr("text-anchor", "middle")
+                        .attr("dy", ".35em")
+                        .attr("fill", "white")
+                        .attr("font-size", d => d.val / 2.5 + "px")
+                        .style("pointer-events", "none")
+                        .style("text-shadow", "0 2px 4px rgba(0,0,0,0.8)")
+                        .style("opacity", 0.9);
+
+
+                    // --- 5. INTERACTION ---
+
+                    const tooltip = document.getElementById("d3-tooltip");
+
+                    node
+                        .on("mouseover", function(event, d) {
+                            // Visual Highlight
+                            d3.select(this).select("circle")
+                                .attr("fill-opacity", 0.4)
+                                .attr("stroke-opacity", 1)
+                                .attr("stroke-width", 3)
+                                .style("filter", "url(#glow)"); // Add glow effect
+                            
+                            // Scale up slightly
+                            d3.select(this).transition().duration(200).attr("transform", 
+                                `translate(${d.x},${d.y}) scale(1.15)`
+                            );
+
+                            // Show Tooltip
+                            tooltip.style.opacity = 1;
+                            tooltip.innerHTML = `
+                                <div style="color:${colors[d.group]}; font-size:12px; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">
+                                    ${categories.find(c => c.group === d.group).id}
+                                </div>
+                                <div style="font-size:16px;">${d.id}</div>
+                            `;
+                            tooltip.style.left = event.pageX + "px";
+                            tooltip.style.top = event.pageY + "px";
+                        })
+                        .on("mouseout", function(event, d) {
+                            // Reset Visuals
+                            d3.select(this).select("circle")
+                                .attr("fill-opacity", 0.15)
+                                .attr("stroke-opacity", 0.6)
+                                .attr("stroke-width", 1.5)
+                                .style("filter", null);
+                            
+                            // Scale down
+                            d3.select(this).transition().duration(200).attr("transform", 
+                                `translate(${d.x},${d.y}) scale(1)`
+                            );
+
+                            tooltip.style.opacity = 0;
+                        });
+
+                    // Tick Function
+                    simulation.on("tick", () => {
+                        link
+                            .attr("x1", d => d.source.x)
+                            .attr("y1", d => d.source.y)
+                            .attr("x2", d => d.target.x)
+                            .attr("y2", d => d.target.y);
+
+                        node.attr("transform", d => `translate(${d.x},${d.y})`);
+                    });
+
+                    // Drag Behavior
+                    function drag(simulation) {
+                        function dragstarted(event, d) {
+                            if (!event.active) simulation.alphaTarget(0.3).restart();
+                            d.fx = d.x;
+                            d.fy = d.y;
+                        }
+
+                        function dragged(event, d) {
+                            d.fx = event.x;
+                            d.fy = event.y;
+                        }
+
+                        function dragended(event, d) {
+                            if (!event.active) simulation.alphaTarget(0);
+                            d.fx = null;
+                            d.fy = null;
+                        }
+
+                        return d3.drag()
+                            .on("start", dragstarted)
+                            .on("drag", dragged)
+                            .on("end", dragended);
+                    }
+
+                    // Handle Resize
+                    window.addEventListener('resize', updateForces);
+                    
+                    // Initialize
+                    updateForces();
+
+                </script>
             </div>
-            <div class="content3">
-                <div class="soucontent3-1">
-                    <div class="soutitle2-1">
-                        <h3>Education</h3>
-                    </div>
-                    <div class="parentpart1">
-                        <div class="part1">
-                            <div class="content">
-                                <p id="title"><i class="fa-solid fa-calendar-days"></i><span> 2022 – Present</span></p>
-                                <h3>PhD Physics, Florida State University</h3>
-                                <p class="text">
-                                    Doctoral Candidate (GPA: 3.54/4). Thesis: <em>Simulating Molecular Cloud Collapse with ENZO</em>. Supervisor: Prof. David Collins.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="part2">
-                            <div class="content">
-                                <p id="title"><i class="fa-solid fa-calendar-days"></i><span> 2017 – 2022</span></p>
-                                <h3>MSc (Hons.) Physics + B.E. Computer Science, BITS Pilani</h3>
-                                <p class="text">
-                                    Integrated Master's & Bachelor's (Overall GPA: 9.08/10). 
-                                    Master's thesis: Radial migration in TNG50 (supervisor Dr. Annalisa Pillepich, Max-Planck-Institut für Astronomie).
-                                </p>
-                            </div>
-                        </div>
-                        <div class="part3">
-                            <div class="content">
-                                <p id="title"><i class="fa-solid fa-calendar-days"></i><span> 2015 – 2017</span></p>
-                                <h3>Higher Secondary Education, Indore Public School</h3>
-                                <p class="text">
-                                    Completed higher secondary education (score: 91.8%).
-                                </p>
-                            </div>
-                        </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="section-pad-small">
+            <div class="container">
+                <div class="contact-box">
+                    <p>Something caught your eye?</p>
+                    <h2>Start the conversation! <i class="fa-solid fa-arrow-down"></i></h2>
+                    <a href="mailto:nikhilbisht65@gmail.com" class="email-link">nikhilbisht65@gmail.com</a>
+                    <div class="social-links">
+                        <a href="https://github.com/AstroDnerd" target="_blank"><i class="fa-brands fa-github"></i></a>
+                        <a href="https://linkedin.com/in/nikhilpsbisht" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
                     </div>
                 </div>
-
-                <div class="soucontent3-2">
-                    <div class="soutitle2-2">
-                        <h3>Selected Projects & Research</h3>
-                    </div>
-                    <div class="parentpart2">
-                        <div class="part4">
-                            <div class="content">
-                                <h3>Simulating Molecular Cloud Collapse (ENZO)</h3>
-                                <p class="text">
-                                    Using ENZO with AMR to model self-gravitating turbulent molecular clouds, including sink particles and feedback, to study when and where stars form.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="part5">
-                            <div class="content">
-                                <h3>Machine Learning for Star Formation</h3>
-                                <p class="text">
-                                    Building 3D spatiotemporal models (1.5M-parameter UNet + Conv-GRU) to forecast collapse from multi-field MHD simulation datasets; physics-aware training & evaluation.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="part6">
-                            <div class="content">
-                                <h3>Stellar Radial Migration (TNG50)</h3>
-                                <p class="text">
-                                    Master's thesis project analysing radial migration across 198 MW/M31 analogs in TNG50; measured typical migration rates and trends with galaxy morphology.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Skills -->
-    <section class="section4" id="skills">
-        <div class="container4">
-            <div class="title3">
-                <h2>My <span>Skills</span></h2>
+        <footer>
+            <div class="container" style="text-align: center; opacity: 0.6; font-size: 0.9rem;">
+                &copy; 2025 Nikhil P. S. Bisht. Built with vanilla HTML, CSS, JavaScript, a dash of pixel art and some Dark Matter :).
             </div>
-            <div class="content4">
-                <div class="soucontent4-1">
-                    <div class="skills-part">
-                        <div class="soutitle3"><h3>Python</h3><h3>Expert</h3></div>
-                        <div class="ratio"><span class="span1"></span></div>
-                    </div>
-                    <div class="skills-part">
-                        <div class="soutitle3"><h3>C / C++</h3><h3>Proficient</h3></div>
-                        <div class="ratio"><span class="span2"></span></div>
-                    </div>
-                    <div class="skills-part">
-                        <div class="soutitle3"><h3>Machine Learning</h3><h3>Advanced</h3></div>
-                        <div class="ratio"><span class="span3"></span></div>
-                    </div>
-                    <div class="skills-part">
-                        <div class="soutitle3"><h3>Data Analysis</h3><h3>Advanced</h3></div>
-                        <div class="ratio"><span class="span4"></span></div>
-                    </div>
-                </div>
-                <div class="soucontent4-2">
-                    <div class="skills-part">
-                        <div class="soutitle3"><h3>Numerical Hydrodynamics / MHD</h3><h3>Advanced</h3></div>
-                        <div class="ratio"><span class="span5"></span></div>
-                    </div>
-                    <div class="skills-part">
-                        <div class="soutitle3"><h3>ENZO / AMR Codes</h3><h3>Proficient</h3></div>
-                        <div class="ratio"><span class="span6"></span></div>
-                    </div>
-                    <div class="skills-part">
-                        <div class="soutitle3"><h3>LaTeX & Scientific Writing</h3><h3>Proficient</h3></div>
-                        <div class="ratio"><span class="span7"></span></div>
-                    </div>
-                    <div class="skills-part">
-                        <div class="soutitle3"><h3>Git & Reproducible Workflows</h3><h3>Proficient</h3></div>
-                        <div class="ratio"><span class="span8"></span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+        </footer>
 
-    <!-- Contact -->
-    <section class="section5" id="contact">
-        <div class="container5">
-            <div class="title4">
-                <h2> <span>Contact</span> Me!</h2>
-            </div>
-            <div class="content5">
-                <form method="POST" action="mailto:nikhilbisht65@gmail.com" enctype="text/plain">
-                    <div class="souform1">
-                        <input type="text" name="Full name" placeholder="Full Name" required>
-                        <input type="email" name="Email" placeholder="Email Address" required>
-                    </div>
-                    <div class="souform2">
-                        <input type="tel" name="Phone" placeholder="Mobile Number" required>
-                        <input type="text" name="Subject" placeholder="Email Subject">
-                    </div>
-                    <div class="souform3">
-                        <textarea name="Message" placeholder="Your Message" required></textarea>
-                    </div>
-                    <div class="souform4">
-                        <input type="submit" value="Submit" class="btn">
-                    </div>
-                </form>
-
-                <div class="contact-details" style="margin-top:20px;">
-                    <p><strong>Email:</strong> <a href="mailto:nikhilbisht65@gmail.com">nikhilbisht65@gmail.com</a></p>
-                    <p><strong>GitHub:</strong> <a href="https://github.com/AstroDnerd" target="_blank">github.com/AstroDnerd</a></p>
-                    <p><strong>Old site:</strong> <a href="https://nikhilbisht65.wixsite.com/astrodnerd" target="_blank">nikhilbisht65.wixsite.com/astrodnerd</a></p>
-                </div>
-
-            </div>
-        </div>
-    </section>
     </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script src="main.js"></script>
+
+    <!-- 1. BACKGROUND CANVAS LOGIC (Dual Mode) -->
+    <script>
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        const toggle = document.getElementById('theme-toggle');
+        let bwidth, bheight;
+        let particles = [];
+        let mouse = { x: -1000, y: -1000 };
+        let animationId;
+
+        // Config
+        const CONFIG = {
+            starCount: 1000,
+            dustCount: 1000,
+            starSpeed: 1.0, // Slow float
+            dustSpeed: 1.5, // Turbulent float
+            mouseRadius: 100,
+            mouseForce: 0.5
+        };
+
+        function resize() {
+            bwidth = window.innerWidth;
+            bheight = window.innerHeight;
+            canvas.width = bwidth;
+            canvas.height = bheight;
+            ctx.translate(bwidth/2, bheight/2);
+        }
+
+        class Particle {
+            constructor(isDark) {
+                this.isDark = isDark;
+                this.init(true);
+            }
+            init(randomZ = false) {
+                this.x = (Math.random() - 0.5) * bwidth * 3;
+                this.y = (Math.random() - 0.5) * height * 3;
+                this.z = randomZ ? Math.random() * 2000 : 2000;
+                this.size = Math.random() * 2 + 1;
+                this.vx = 0; this.vy = 0;
+            }
+            update(speed) {
+                this.z -= speed;
+                const perspective = 300 / (300 + this.z);
+                const sx = this.x * perspective;
+                const sy = this.y * perspective;
+                
+                // Mouse Interaction
+                const mx = mouse.x - bwidth/2; 
+                const my = mouse.y - bheight/2;
+                const dx = sx - mx; 
+                const dy = sy - my;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                
+                if(dist < CONFIG.mouseRadius) {
+                    const angle = Math.atan2(dy, dx);
+                    const force = (CONFIG.mouseRadius - dist) / CONFIG.mouseRadius;
+                    this.vx += Math.cos(angle) * force * CONFIG.mouseForce;
+                    this.vy += Math.sin(angle) * force * CONFIG.mouseForce;
+                }
+
+                // Turbulence for Solar Mode
+                if(!this.isDark) this.vy -= 0.05;
+
+                this.vx *= 0.95; this.vy *= 0.95;
+                this.x += this.vx; this.y += this.vy;
+
+                if(this.z <= 1 || Math.abs(sx) > bwidth || Math.abs(sy) > bheight) this.init();
+            }
+            draw() {
+                const perspective = 300 / (300 + this.z);
+                const sx = this.x * perspective;
+                const sy = this.y * perspective;
+                const scale = (2000 - this.z) / 2000;
+                const sSize = Math.max(1, this.size * scale * 2);
+                
+                let color = this.isDark ? `rgba(255,255,255,${scale})` : `rgba(40,10,0,${scale})`; // White vs Dark Ash
+                
+                ctx.fillStyle = color;
+                ctx.fillRect(sx, sy, sSize, sSize);
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const isDark = !toggle.checked;
+            const count = isDark ? CONFIG.starCount : CONFIG.dustCount;
+            for(let i=0; i<count; i++) particles.push(new Particle(isDark));
+        }
+
+        function animate() {
+            const isDark = !toggle.checked;
+            
+            // Clear
+            ctx.clearRect(-bwidth/2, -bheight/2, bwidth, bheight);
+            
+            // Update & Draw
+            particles.forEach(p => {
+                p.update(isDark ? CONFIG.starSpeed : CONFIG.dustSpeed);
+                p.draw();
+            });
+
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // Events
+        window.addEventListener('resize', resize);
+        window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+        
+        toggle.addEventListener('change', () => {
+            document.body.classList.toggle('light-mode');
+            initParticles();
+        });
+
+        // Start
+        resize();
+        initParticles();
+        animate();
+
+        // Timeline Scroll Logic
+        const tlContainer = document.getElementById('timelineWrapper');
+        tlContainer.addEventListener('wheel', (evt) => {
+            evt.preventDefault();
+            tlContainer.scrollLeft += evt.deltaY;
+        });
+
+    </script>
+    
 </body>
-<script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
-<script src="main.js"></script>
 </html>

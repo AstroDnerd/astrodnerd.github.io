@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulating Molecular Cloud Collapse | Nikhil Bisht</title>
+    
+    <!-- STYLES -->
+    <link rel="stylesheet" href="assets/style.css"> <!-- Base styles -->
+    <link rel="stylesheet" href="assets/projects.css"> <!-- Blog specific styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
+    <!-- BACKGROUND CANVAS -->
+    <canvas id="bg-canvas"></canvas>
+    <input type="checkbox" id="theme-toggle" class="theme-toggle-checkbox">    
+    <div class="site">
+        
+        <!-- HEADER (Consistent with Main Site) -->
+        <header>
+            <div class="logo">
+                <a href="index.html"><span>N</span>B</a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html#projects">← Back to Projects</a></li>
+                </ul>
+            </nav>
+            <label for="theme-toggle" class="theme-toggle-label">
+                <i class="fa-solid fa-moon"></i>
+                <i class="fa-solid fa-sun"></i>
+            </label>
+        </header>
+
+        <div class="project-container">
+            
+            <!-- ARTICLE HEADER -->
+            <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Home</a>
+            
+            <article>
+                <h1>Forecasting Star Formation: <br> From MHD Turbulence to Deep Learning</h1>
+                <p class="lead">
+                    An end-to-end pipeline combining Adaptive Mesh Refinement (AMR) simulations with a custom 3D Hybrid ConvGRU-UNet to predict the birth of stars in chaotic molecular clouds.
+                </p>
+
+                <!-- SECTION 1: THE SCIENCE -->
+                <section id="science">
+                    <h2>1. The Physics: Turbulence & Gravity</h2>
+                    <p>
+                        Star formation is a battle between gravity and turbulence. In the interstellar medium, giant molecular clouds (GMCs) are not smooth blobs of gas; they are chaotic, turbulent structures threaded by magnetic fields. 
+                        Supersonic turbulence creates density fluctuations, shockwaves that compress gas into filaments and cores.
+                    </p>
+                    <div class="media-block">
+                        <video controls poster="assets/sim3Dpp.webp">
+                            <source src="assets/sim3D.webm" type="video/webm" preload="metadata">
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="caption">Video 1. Turbulent collapse of a molecular cloud simulated with ENZO</div>
+                    </div>
+                    <p>
+                        However, we don't fully understand exactly <em>when</em> and <em>where</em> gravity wins. Once a region becomes dense enough (crossing the Jeans instability threshold), it collapses to form a protostar.
+                        Predicting these collapse events is notoriously difficult because the underlying physics is highly non-linear and stochastic.
+                    </p>
+                    <div class="media-block">
+                        <inbody>
+                        <insideh1>Star Formation Dynamics</insideh1>
+                        <div class="controls">
+                            <button id="main-btn" onclick="window.toggleSimulation()">Start Simulation</button>
+                        </div>
+
+                        <div class="infographic-container">
+                            
+                            <!-- WRAPPER 1 -->
+                            <div class="panel-wrapper">
+                                <div class="panel" id="panel1">
+                                    <div class="panel-label">Fig 1. Gravoturbulent Fragmentation</div>
+                                    <div class="scale-bar" style="width: 100px;">10 pc</div>
+                                    <canvas id="canvas1" width="400" height="400"></canvas>
+                                    
+                                    <div id="anno-gmc" class="annotation" style="top: 90%; left: 50%; transform: translate(-50%, -50%);">GMC: T ~ 10K</div>
+                                    <div id="anno-shock" class="annotation" style="top: 10%; left: 10%; color: var(--hot);">External Shockwave</div>
+                                    <div id="anno-jeans" class="annotation" style="bottom: 20%; left: 10%;">M > M<sub>Jeans</sub></div>
+                                </div>
+                                <div class="caption-box" id="caption1">
+                                    Phase 1: Giant Molecular Cloud (GMC) supported by internal turbulence. Awaiting trigger event.
+                                </div>
+                            </div>
+
+                            <div class="arrow-connector" id="arrow"></div>
+
+                            <!-- WRAPPER 2 -->
+                            <div class="panel-wrapper">
+                                <div class="panel" id="panel2">
+                                    <div class="panel-label">Fig 2. Protostellar Collapse</div>
+                                    <div class="scale-bar" style="width: 100px;">0.1 pc</div>
+                                    <canvas id="canvas2" width="400" height="400"></canvas>
+
+                                    <div id="anno-core" class="annotation" style="top: 20%; left: 60%;">Pre-stellar Core</div>
+                                    <div id="anno-disk" class="annotation" style="top: 70%; left: 20%;">Accretion Disk</div>
+                                    <div id="anno-proto" class="annotation" style="top: 48%; left: 55%; color: var(--warm);">Protostar Ignition</div>
+                                </div>
+                                <div class="caption-box" id="caption2">
+                                    Waiting for fragmentation input...
+                                </div>
+                            </div>
+
+                        </div>
+                        </inbody>
+                        <div class="caption">Fig: Visualization of Star Formation</div>
+                    </div>
+                </section>
+
+                <!-- SECTION 2: THE SIMULATION -->
+                <section id="simulation">
+                    <h2>2. The Simulation: ENZO & MHD</h2>
+                    <p>
+                        To study this, I rely on <a href="https://enzo-project.org/" style="color: var(--accent);" target="_blank"> <strong>ENZO</strong></a>, an open-source adaptive mesh refinement (AMR) code. 
+                        I set up a suite of high-resolution Magnetohydrodynamic (MHD) simulations. These aren't simple gravity-only boxes; they solve the full ideal MHD equations, tracking fluid density, velocity, magnetic fields, and energy.
+                    </p>
+                    <p>
+                        The key feature here is <strong>AMR</strong>. The simulation automatically increases resolution in regions of interest (collapsing cores) while keeping void regions coarse. 
+                        This allows us to span dynamic ranges of over \( 10^{5} \) in spatial scale, capturing the formation of pre-stellar cores, entities that will eventually lead  to the formation of stars.
+                    </p>
+
+                    <div class="media-block">
+                        <img src="assets/AMR.webp" alt="Visualization of Adaptive Mesh Refinement Grid">
+                        <div class="caption">Fig 2. Visualization of the parallelized data structure of Enzo's Adaptive Mesh Refinement (AMR).</div>
+                    </div>
+                    <p> 
+                        Fig 2 shows how ENZO runs it's simulations. The space is divided into grids where the physics is solved. Each grid is further subdivided into various zones which can then be stored on separate processors.
+                        The lower left panel depicts the hierarchy tree distributed across processors, distinguishing between Real Grids (data stored locally) and Ghost Grids (data stored on other processors). 
+                        The right panel details an individual grid, showing the core Real Zones that contain active simulation fields surrounded by a layer of Ghost Zones used to exchange boundary information with neighbors via MPI.
+                    </p>
+                    <h3>The Simulation Suite</h3>
+                    <p>
+                        I generated a massive dataset of 3D volumetric snapshots. Below is a visualization of the full simulation suite, showing the density evolution over time as turbulence decays and gravity takes over.
+                    </p>
+
+                    <div class="media-block">
+                        <!-- PLACEHOLDER FOR SIMULATION VIDEO -->
+                        <video controls poster="assets/densitypp.webp">
+                            <source src="assets/DensityplotAll.webm" type="video/webm" preload="metadata">
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="caption">Video 2. Time-evolution of column density of all 32 simulations in the suite. 
+                            Left to right is decreasing driving sonic Alfven Mach number and top to bottom is different variations for the same Mach number.</div>
+                    </div>
+                </section>
+
+                <!-- SECTION 3: THE MODEL -->
+                <section id="model">
+                    <h2>3. The Solution: 3D Hybrid ConvGRU-UNet</h2>
+                    <p>
+                        Analyzing terabytes of 3D data by hand is impossible. Traditional threshold-based methods (like Clumpfind) are often too simplistic. 
+                        I developed a Deep Learning approach to treat this as a <strong>spatiotemporal forecasting problem</strong>.
+                    </p>
+                    <p>
+                        My model combines two powerful architectures:
+                    </p>
+                    <ul>
+                        <li><strong>3D U-Net:</strong> To extract spatial hierarchies and features (filaments, shocks) from the volumetric density field.</li>
+                        <li><strong>ConvGRU (Convolutional Gated Recurrent Unit):</strong> To learn the <em>time-evolution</em> of these features. Unlike a standard RNN, a ConvGRU maintains the spatial structure of the memory.</li>
+                    </ul>
+
+                    <div class="media-block">
+                            <h4>Hybrid ConvGRU-UNet3D Architecture</h4>
+                            <div class="diagram-container">
+                                <svg id="svg-layer">
+                                    <!-- Definitions for markers -->
+                                    <defs>
+                                        <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+                                        refX="9" refY="3.5" orient="auto">
+                                        <polygon points="0 0, 10 3.5, 0 7" fill="#475569" />
+                                        </marker>
+                                        
+                                        <!-- Recurrent Loop Arrow -->
+                                        <marker id="loop-arrow" markerWidth="10" markerHeight="7"
+                                        refX="9" refY="3.5" orient="auto">
+                                        <polygon points="0 0, 10 3.5, 0 7" fill="#d946ef" />
+                                        </marker>
+                                    </defs>
+                                    <!-- Lines will be injected here by JS -->
+                                </svg>
+
+                                <!-- Components -->
+                                <!-- 1. Input -->
+                                <div class="label" style="top: 200px; left: 10px;">Input</div>
+                                <div class="node tensor" id="input" style="top: 240px; left: 30px;">
+                                    <div class="tensor-stack" style="left: -4px; top: -4px;"></div>
+                                    <div class="tensor-stack"></div>
+                                </div>
+
+                                <!-- 2. ConvGRU Stack -->
+                                
+                                <!-- Layer 1 -->
+                                <div class="label" style="top: 160px; left: 110px;">ConvGRU L1</div>
+                                <div class="node memory-state" id="mem1" style="top: 190px; left: 130px;">h<sub>t-1</sub></div>
+                                <div class="node gru-block" id="gru1" style="top: 210px; left: 110px;">
+                                    <span class="gru-label">Layer 1</span>
+                                </div>
+                                
+                                <!-- Layer 2 -->
+                                <div class="label" style="top: 160px; left: 230px;">ConvGRU L2</div>
+                                <div class="node memory-state" id="mem2" style="top: 190px; left: 250px;">h<sub>t-1</sub></div>
+                                <div class="node gru-block" id="gru2" style="top: 210px; left: 230px;">
+                                    <span class="gru-label">Layer 2</span>
+                                </div>
+
+                                <!-- 3. UNet Encoder -->
+                                <div class="label" style="top: 50px; left: 370px;">Encoder Path</div>
+                                
+                                <div class="node enc" id="enc1" style="top: 120px; left: 360px;">Conv1</div>
+                                <div class="node enc" id="enc2" style="top: 200px; left: 360px;">Conv2</div>
+                                <div class="node enc" id="enc3" style="top: 280px; left: 360px;">Conv3</div>
+                                <div class="node enc" id="enc4" style="top: 360px; left: 360px;">Conv4</div>
+
+                                <!-- 4. Bottleneck -->
+                                <div class="node bottleneck" id="bottle" style="top: 440px; left: 460px;">Conv5</div>
+
+                                <!-- 5. UNet Decoder + Attention -->
+                                <div class="label" style="top: 50px; left: 570px;">Decoder Path</div>
+
+                                <!-- Attention Gates -->
+                                <div class="node att-gate" id="att4" style="top: 365px; left: 485px;">AG</div>
+                                <div class="node att-gate" id="att3" style="top: 285px; left: 485px;">AG</div>
+                                <div class="node att-gate" id="att2" style="top: 205px; left: 485px;">AG</div>
+                                <div class="node att-gate" id="att1" style="top: 125px; left: 485px;">AG</div>
+
+                                <!-- Decoder Blocks -->
+                                <div class="node dec" id="dec4" style="top: 360px; left: 560px;">Up4</div>
+                                <div class="node dec" id="dec3" style="top: 280px; left: 560px;">Up3</div>
+                                <div class="node dec" id="dec2" style="top: 200px; left: 560px;">Up2</div>
+                                <div class="node dec" id="dec1" style="top: 120px; left: 560px;">Up1</div>
+
+                                <!-- 6. Output Conv -->
+                                <div class="node out-conv" id="out1x1" style="top: 230px; left: 700px;">1x1<br>Conv</div>
+
+                                <!-- 7. Output -->
+                                <div class="label" style="top: 190px; left: 790px;">Output Mask</div>
+                                <div class="node tensor" id="output" style="top: 230px; left: 800px;">
+                                    <div class="tensor-stack" style="border-color: #10b981; background: rgba(16, 185, 129, 0.1);"></div>
+                                </div>
+
+                            </div>
+                            <div class="status-bar" id="status">System Idle</div>
+                        <div class="caption">Fig 3. Data flow through the Hybrid ConvGRU-UNet. The encoder compresses spatial info, while the GRU tracks temporal changes.</div>
+                    </div>
+                    <h3>Results & Performance</h3>
+                    <p>
+                        The model successfully predicts the location of sink particle formation <strong>N snapshots in advance</strong>. 
+                        It learned to identify not just high-density regions, but converging flows, the velocity signatures that precede collapse.
+                    </p>
+                    <div class="media-block">
+                        <img src="assets/model_prediction.webp" alt="UNet Model Prediction Visualization">
+                        <div class="caption">Fig 4. The xy projection of density channel of model input and output.</div>
+                    </div>
+                    <p>
+                        By training on this synthetic data, we can potentially apply this model to real observational data cubes (like ALMA) to identify star-forming regions that are currently "quiet" but destined to collapse.
+                    </p>
+                </section>
+                
+                <section id="model">
+                    <h2>4. Some More Images :D :</h2>
+                    <p>
+                        We also put Lagrangian tracer particles in our simulations that follow the flow of gas. We then go to the end of the simulation, identify prestellar cores, the tracers that belong 
+                        to them and trace them back in time to see how they evolved. Fig 5 shows some visualizations of the core tracks and their features during collapse. Top row shows x-y projection of 
+                        trajectories of tracer particles belonging to each core from the 50th (yellow) to the 120th (purple) frame. The middle row shows the density of the host cell of the tracers for the 
+                        same time frame and the bottom row shows the velocity magnitude for each tracer during the collapse. For both \(rho\) and \(v\), we also show the median and the 25th-75th percentile 
+                        region around the median. <strong>As the cores collapse, the density ramps up and there is relatively less dispersion of velocity.</strong>
+                    </p>
+                    <div class="media-block">
+                        <img src="assets/tracks_n_features.webp" alt="Core tracks">
+                        <div class="caption">Fig 5. Various features of 3 out of 285 cores in the simulation. </div>
+                    </div>
+                    <p>
+                        Here is a 2D xy density projection of 4 timesteps of a simulation showing the formation and collapse of a prestellar cores. We see the the filaments collapsing under gravity and forming dense cores 
+                        that will eventually form stars.
+                    </p>
+                    <div class="media-block">
+                        <img src="assets/DensityPlot_xy_u502.webp" alt="u502 density plot">
+                        <div class="caption">Fig 6. 2D xy density projection of a simulation.</div>
+                    </div>
+                    
+                </section>
+
+            </article>
+
+            <!-- FOOTER -->
+            <div class="project-footer">
+                <p>Check out the code on <a href="https://github.com/AstroDnerd/StarFormationForecasting" style="color:var(--accent);" target="_blank">GitHub</a>.</p>
+                <p>&copy; 2025 Nikhil Bisht.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        const toggle = document.getElementById('theme-toggle');
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            ctx.translate(width/2, height/2);
+        }
+        window.addEventListener('resize', resize);
+        window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+        toggle.addEventListener('change', () => {
+            document.body.classList.toggle('light-mode');
+        });
+        resize();
+    </script>
+    <script src="main.js"></script> 
+    <script>
+        (function() {
+            if (window.starSimAnimId) cancelAnimationFrame(window.starSimAnimId);
+
+            // --- CONFIG ---
+            const PARTICLE_COUNT = 1000;
+            const FRICTION =0.96; // Less friction for better orbits
+            const CENTERS = [
+                {x: 100, y: 100, strength: 150}, // Strength increased for 1/r
+                {x: 300, y: 250, strength: 250}, // Main core
+                {x: 150, y: 300, strength: 100}
+            ];
+
+            // --- STATE ---
+            // Stages:
+            // 0: Idle (Ready to Start)
+            // 1: Shockwave
+            // 2: Clumping (Jeans Instability)
+            // 3: Freeze P1, Start P2 (Core Selection)
+            // 4: Collapse (Spin up)
+            // 5: Disk Formation
+            // 6: Ignition
+            // 7: Finished (Frozen)
+            let stage = 0;
+            let isRunning = false;
+
+            // --- DOM ELEMENTS ---
+            const btn = document.getElementById('main-btn');
+            const cap1 = document.getElementById('caption1');
+            const cap2 = document.getElementById('caption2');
+
+            // --- CANVAS SETUP ---
+            const c1 = document.getElementById('canvas1');
+            const ctx1 = c1.getContext('2d');
+            let particles1 = [];
+            let shockwaveX = -50;
+
+            const c2 = document.getElementById('canvas2');
+            const ctx2 = c2.getContext('2d');
+            let particles2 = [];
+            let protostar = { active: false, temp: 0, radius: 0 };
+
+            class Particle {
+                constructor(x, y, type = 'gas') {
+                    this.x = x;
+                    this.y = y;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.mass = Math.random() * 2 + 1;
+                    this.color = `rgba(200, 210, 220, ${Math.random() * 0.5 + 0.1})`;
+                    
+                    // P2 specific props
+                    this.angle = 0;
+                    this.dist = 0;
+                }
+                draw(ctx) {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.mass/1.5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            // --- INIT / RESET ---
+            function init(reset=false) {
+                stage = 0;
+                isRunning = false;
+                
+                // UI Reset
+                btn.innerText = "Start Simulation";
+                document.getElementById('panel1').classList.add('active');
+                document.getElementById('panel1').style.opacity = 1;
+                document.getElementById('panel2').classList.remove('active');
+                document.getElementById('panel2').style.opacity = 0.3;
+                document.getElementById('arrow').style.opacity = 0;
+                
+                // Text Reset
+                hideAnnos();
+                document.getElementById('anno-gmc').style.opacity = 1;
+                cap1.innerHTML = "Phase 1: <span class='highlight'>Giant Molecular Cloud</span>. Cold gas supported by supersonic turbulence.";
+                cap1.classList.add('visible');
+                cap2.classList.remove('visible');
+
+                // Physics Reset
+                particles1 = [];
+                particles2 = [];
+                shockwaveX = -100;
+                protostar = { active: false, temp: 0, radius: 0 };
+
+                for(let i=0; i<PARTICLE_COUNT; i++) {
+                    particles1.push(new Particle(Math.random() * 400, Math.random() * 400));
+                }
+
+                if (window.starSimAnimId) cancelAnimationFrame(window.starSimAnimId);
+                loop();
+            }
+
+            function hideAnnos() {
+                document.querySelectorAll('.annotation').forEach(el => el.style.opacity = 0);
+            }
+
+            // --- MAIN LOOP ---
+            function loop() {
+                // PANEL 1 RENDER
+                // We stop clearing Panel 1 only when Stage 3 starts (freeze)
+                if (stage < 3) {
+                    ctx1.clearRect(0, 0, 400, 400);
+                    drawGrid(ctx1);
+
+                    // Shockwave Drawing
+                    if (stage >= 1) {
+                        shockwaveX += 2; // Speed of sound
+                        if(shockwaveX < 500) {
+                            ctx1.strokeStyle = 'rgba(239, 68, 68, 0.6)'; // Red shock
+                            ctx1.lineWidth = 3;
+                            ctx1.beginPath();
+                            ctx1.moveTo(shockwaveX, 0);
+                            ctx1.lineTo(shockwaveX, 400);
+                            ctx1.stroke();
+                        }
+                    }
+
+                    // Particles P1
+                    particles1.forEach(p => {
+                        // Turbulence (Stage 0)
+                        if (stage === 0) {
+                            p.x += p.vx;
+                            p.y += p.vy;
+                            if(p.x<0||p.x>400) p.vx*=-1;
+                            if(p.y<0||p.y>400) p.vy*=-1;
+                        }
+                        // Shock & Collapse (Stage 1+)
+                        else if (stage >= 1) {
+                            // Shock interaction
+                            if (p.x < shockwaveX) {
+                                // Impulse
+                                p.vx += 0.01; 
+
+                                // Trigger Stage 2 (Clumping)
+                                if (stage === 1 && shockwaveX > 150) {
+                                    stage = 2;
+                                    cap1.innerHTML = "Instability Triggered. <span class='highlight'>Gravity wins</span> over pressure (Jeans Instability).";
+                                    document.getElementById('anno-shock').style.opacity = 0; // hide shock text
+                                    document.getElementById('anno-jeans').style.opacity = 1;
+                                }
+
+                                // Gravity Physics (Inverse Distance Force)
+                                if (stage === 2) {
+                                    // Find nearest gravitational center
+                                    let nearest = CENTERS[0];
+                                    let minDSq = 999999;
+                                    
+                                    CENTERS.forEach(c => {
+                                        let dx = c.x - p.x;
+                                        let dy = c.y - p.y;
+                                        let dSq = dx*dx + dy*dy;
+                                        if(dSq < minDSq) { minDSq = dSq; nearest = c; }
+                                    });
+
+                                    // F = G * M / r (using r not r^2 for visual stability)
+                                    let dx = nearest.x - p.x;
+                                    let dy = nearest.y - p.y;
+                                    let dist = Math.sqrt(dx*dx + dy*dy);
+                                    let force = nearest.strength / (dist + 1); // +10 softens singularity
+
+                                    let angle = Math.atan2(dy, dx);
+                                    p.vx += Math.cos(angle) * force * 0.005; 
+                                    p.vy += Math.sin(angle) * force * 0.005;
+                                    p.vx *= FRICTION;
+                                    p.vy *= FRICTION;
+                                }
+                            }
+                            p.x += p.vx;
+                            p.y += p.vy;
+                        }
+                        p.draw(ctx1);
+                    });
+
+                    // End P1 -> Start P2
+                    if (stage === 2 && shockwaveX > 1500) {
+                        transitionToP2();
+                    }
+                }
+
+                // PANEL 2 RENDER
+                if (stage >= 3 && stage < 7) {
+                    ctx2.clearRect(0, 0, 400, 400);
+                    drawGrid(ctx2);
+
+                    particles2.forEach(p => {
+                        // Angular Momentum: v = k / r
+                        // As dist decreases, velocity increases
+                        let velocity = 30 / (p.dist + 1);
+
+                        if (stage >= 4) {
+                            // Collapse
+                            p.dist -= 0.4; 
+                            if(p.dist < 5) p.dist =5; // Hit protostar surface
+
+                            // Heat (Color change based on radius)
+                            if (p.dist < 60) {
+                                p.color = `rgba(255, ${150 + p.dist*1.5}, 50, 0.9)`;
+                            }
+
+                            // Update Pos
+                            p.angle += velocity * 0.05;
+                            p.x = 200 + Math.cos(p.angle) * p.dist;
+                            p.y = 200 + Math.sin(p.angle) * p.dist;
+                        }
+                        p.draw(ctx2);
+                    });
+
+                    // Protostar Growth
+                    if (stage === 4) {
+                        protostar.radius += 0.05;
+                        if(protostar.radius > 20) { // arbitrary timeline
+                            stage = 5;
+                            cap2.innerHTML = "Conservation of Angular Momentum creates an <span class='highlight'>Accretion Disk</span>.";
+                            document.getElementById('anno-disk').style.opacity = 1;
+                        }
+                    }
+
+                    // Ignition
+                    if (stage >= 5) {
+                        protostar.temp += 1;
+                        // Draw star
+                        let glow = ctx2.createRadialGradient(200, 200, 5, 200, 200, 50);
+                        glow.addColorStop(0, '#fff');
+                        glow.addColorStop(0.3, 'rgba(245, 158, 11, 0.8)');
+                        glow.addColorStop(1, 'rgba(245, 158, 11, 0)');
+                        ctx2.fillStyle = glow;
+                        ctx2.beginPath(); ctx2.arc(200, 200, 50, 0, Math.PI*2); ctx2.fill();
+
+                        if (protostar.temp > 250 && stage !== 6) {
+                            stage = 6;
+                            cap2.innerHTML = "Core Temp > 10M K. <span class='highlight'>Nuclear Fusion</span> Ignites.";
+                            document.getElementById('anno-proto').style.opacity = 1;
+                            
+                            // Schedule Freeze
+                            setTimeout(() => {
+                                stage = 7;
+                                btn.innerText = "Start Simulation"; // Reset button text for next run (actually requires reset first)
+                                cap2.innerHTML += " <br><strong>(Simulation Complete)</strong>";
+                            }, 3000);
+                        }
+                    }
+                }
+                
+                // Keep drawing frozen state for P2 if finished
+                if (stage === 7) {
+                    // Just don't clearRect, frame persists
+                }
+
+                window.starSimAnimId = requestAnimationFrame(loop);
+            }
+
+            function transitionToP2() {
+                stage = 3;
+                // Dim Panel 1, Light Panel 2
+                document.getElementById('panel1').style.opacity = 0.5;
+                document.getElementById('panel2').classList.add('active');
+                document.getElementById('panel2').style.opacity = 1;
+                document.getElementById('arrow').style.opacity = 1;
+                
+                // Move Caption Focus
+                //cap1.classList.remove('visible');
+                cap2.classList.add('visible');
+                cap2.innerHTML = "Zooming in on dense core. Initial state: Slow rotation, cold.";
+
+                // Initialize Particles P2
+                for(let i=0; i<500; i++) {
+                    let angle = Math.random() * Math.PI * 2;
+                    let dist = Math.random() * 140 + 60; // 60-200 radius
+                    let p = new Particle(0,0);
+                    p.angle = angle;
+                    p.dist = dist;
+                    // Set initial XY for first draw
+                    p.x = 200 + Math.cos(angle) * dist;
+                    p.y = 200 + Math.sin(angle) * dist;
+                    particles2.push(p);
+                }
+                document.getElementById('anno-core').style.opacity = 1;
+
+                setTimeout(() => {
+                    stage = 4; // Start collapse
+                    cap2.innerHTML = "Core collapse begins. <span class='highlight'>Spin-up</span> due to angular momentum conservation.";
+                }, 1500);
+            }
+
+            function drawGrid(ctx) {
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                for(let i=0; i<=400; i+=50) {
+                    ctx.moveTo(i, 0); ctx.lineTo(i, 400);
+                    ctx.moveTo(0, i); ctx.lineTo(400, i);
+                }
+                ctx.stroke();
+            }
+
+            // --- EXPORTS ---
+            window.toggleSimulation = function() {
+                if(!isRunning) {
+                    // Start
+                    if (stage === 7) { // If finished, reset then start
+                        init();
+                        setTimeout(() => {
+                            stage = 1;
+                            isRunning = true;
+                            btn.innerText = "Reset Simulation";
+                            document.getElementById('anno-shock').style.opacity = 1;
+                            cap1.innerHTML = "Shockwave enters. Triggering compression.";
+                        }, 100);
+                    } else if (stage === 0) {
+                        stage = 1;
+                        isRunning = true;
+                        btn.innerText = "Reset Simulation";
+                        document.getElementById('anno-shock').style.opacity = 1;
+                        cap1.innerHTML = "Shockwave enters. Triggering compression.";
+                    }
+                } else {
+                    // Reset
+                    init();
+                }
+            };
+
+            // Initial Draw
+            init();
+
+        })();
+    </script>
+    <script>
+        // --- 1. CONFIG & SETUP ---
+        const svg = document.getElementById('svg-layer');
+        const statusEl = document.getElementById('status');
+        
+        // Define connections: [StartID, EndID, Type]
+        const connections = [
+            // GRU Stack Connectivity
+            ['input', 'gru1', 'straight'],
+            ['gru1', 'gru2', 'straight'],
+            ['gru2', 'enc1', 'elbow-up'],
+            
+            // Encoder Path
+            ['enc1', 'enc2', 'straight'],
+            ['enc2', 'enc3', 'straight'],
+            ['enc3', 'enc4', 'straight'],
+            ['enc4', 'bottle', 'elbow-down'],
+
+            // Bottleneck to Decoder
+            ['bottle', 'dec4', 'elbow-up'],
+
+            // Decoder Path
+            ['dec4', 'dec3', 'straight-up'],
+            ['dec3', 'dec2', 'straight-up'],
+            ['dec2', 'dec1', 'straight-up'],
+
+            // Attention / Skip Connections
+            ['enc4', 'att4', 'straight'],
+            ['enc3', 'att3', 'straight'],
+            ['enc2', 'att2', 'straight'],
+            ['enc1', 'att1', 'straight'],
+
+            // AG to Decoder
+            ['att4', 'dec4', 'straight'],
+            ['att3', 'dec3', 'straight'],
+            ['att2', 'dec2', 'straight'],
+            ['att1', 'dec1', 'straight'],
+
+            // Output
+            ['dec1', 'out1x1', 'elbow-down'],
+            ['out1x1', 'output', 'straight']
+        ];
+
+        // --- 2. DRAWING LOGIC ---
+        function getCenter(el) {
+            const rect = el.getBoundingClientRect();
+            const container = document.querySelector('.diagram-container').getBoundingClientRect();
+            return {
+                x: rect.left - container.left + rect.width / 2,
+                y: rect.top - container.top + rect.height / 2,
+                w: rect.width,
+                h: rect.height
+            };
+        }
+
+        function drawLines() {
+            let svgContent = '';
+            
+            // Re-add defs
+            svgContent += `<defs>
+                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="#475569" />
+                </marker>
+                <marker id="mem-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                    <polygon points="0 0, 8 3, 0 6" fill="#d946ef" />
+                </marker>
+            </defs>`;
+
+            // Standard Connections
+            connections.forEach(conn => {
+                const start = document.getElementById(conn[0]);
+                const end = document.getElementById(conn[1]);
+                if(!start || !end) return;
+
+                const p1 = getCenter(start);
+                const p2 = getCenter(end);
+                
+                let pathD = '';
+
+                // Logic for connection styles
+                if (conn[2] === 'straight') {
+                    pathD = `M ${p1.x + p1.w/2} ${p1.y} L ${p2.x - p2.w/2} ${p2.y}`;
+                } 
+                else if (conn[2] === 'straight-up') {
+                    pathD = `M ${p1.x} ${p1.y - p1.h/2} L ${p2.x} ${p2.y + p2.h/2}`;
+                }
+                else if (conn[2] === 'elbow-up') {
+                    const midX = (p1.x + p2.x) / 2;
+                    pathD = `M ${p1.x + p1.w/2} ${p1.y} L ${midX} ${p1.y} L ${midX} ${p2.y} L ${p2.x - p2.w/2} ${p2.y}`;
+                } 
+                else if (conn[2] === 'elbow-down') {
+                     const midX = (p1.x + p2.x) / 2;
+                     pathD = `M ${p1.x + p1.w/2} ${p1.y} L ${midX} ${p1.y} L ${midX} ${p2.y} L ${p2.x - p2.w/2} ${p2.y}`;
+                }
+
+                svgContent += `<path d="${pathD}" class="conn-line" marker-end="url(#arrowhead)" />`;
+                svgContent += `<path d="${pathD}" class="flow-path" id="path-${conn[0]}-${conn[1]}" />`;
+            });
+
+            // Draw Memory Loop Connections (Visual Only)
+            // Memory to GRU (Feedback loop)
+            ['gru1', 'mem1', 'gru2', 'mem2'].forEach((id, i, arr) => {
+                if(i % 2 !== 0) return; // process pairs
+                const gru = document.getElementById(id); // gru1
+                const mem = document.getElementById(arr[i+1]); // mem1
+                const pG = getCenter(gru);
+                const pM = getCenter(mem);
+                
+                // Line from Mem to GRU center
+                const pathMem = `M ${pM.x} ${pM.y + pM.h/2} L ${pG.x + 10} ${pG.y - pG.h/2 + 20}`;
+                // Simplified visual connection
+                svgContent += `<path d="M ${pM.x} ${pM.y + 25} L ${pM.x} ${pG.y}" class="conn-line" style="stroke:#d946ef; opacity:0.5; stroke-dasharray: 2 2;" />`;
+            });
+
+            svg.innerHTML = svgContent;
+        }
+
+        drawLines();
+
+        // --- 3. ANIMATION LOGIC ---
+
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+        async function activateNode(id, text=null, colorClass='active') {
+            const el = document.getElementById(id);
+            if(el) {
+                el.classList.add(colorClass);
+                if(text) statusEl.textContent = text;
+            }
+            await sleep(400); 
+        }
+
+        async function deactivateNode(id) {
+            const el = document.getElementById(id);
+            if(el) el.classList.remove('active');
+        }
+
+        async function pulsePath(startId, endId) {
+            const path = document.getElementById(`path-${startId}-${endId}`);
+            if(path) {
+                path.style.transition = 'none';
+                path.style.strokeDasharray = `10 ${path.getTotalLength()}`;
+                path.style.strokeDashoffset = path.getTotalLength() + 10;
+                path.style.opacity = 1;
+                path.getBoundingClientRect();
+                path.style.transition = 'stroke-dashoffset 0.6s linear';
+                path.style.strokeDashoffset = 0;
+                await sleep(600);
+                path.style.opacity = 0;
+            }
+        }
+
+        async function runCycle() {
+            document.querySelectorAll('.node').forEach(n => n.classList.remove('active'));
+            
+            // 1. Input
+            await activateNode('input', 'Loading Input Sequence');
+            await pulsePath('input', 'gru1');
+            await deactivateNode('input');
+
+            // 2. ConvGRU Stack
+            // Layer 1
+            statusEl.textContent = 'ConvGRU Layer 1: Updating Hidden State h(t)';
+            document.getElementById('gru1').classList.add('active');
+            // Flash memory
+            await sleep(200);
+            document.getElementById('mem1').classList.add('active');
+            await sleep(600);
+            document.getElementById('mem1').classList.remove('active');
+            await pulsePath('gru1', 'gru2');
+            document.getElementById('gru1').classList.remove('active');
+
+            // Layer 2
+            statusEl.textContent = 'ConvGRU Layer 2: Deep Temporal Abstraction';
+            document.getElementById('gru2').classList.add('active');
+            await sleep(200);
+            document.getElementById('mem2').classList.add('active');
+            await sleep(600);
+            document.getElementById('mem2').classList.remove('active');
+            await pulsePath('gru2', 'enc1');
+            document.getElementById('gru2').classList.remove('active');
+
+            // 3. Encoder Path
+            const encoders = ['enc1', 'enc2', 'enc3', 'enc4'];
+            for(let i=0; i<encoders.length; i++) {
+                await activateNode(encoders[i], `UNet Encoder: Layer ${i+1}`);
+                pulsePath(encoders[i], `att${i+1}`); // Skip connection trigger
+                if(i < encoders.length - 1) {
+                    await pulsePath(encoders[i], encoders[i+1]);
+                    deactivateNode(encoders[i]);
+                }
+            }
+            await pulsePath('enc4', 'bottle');
+            await deactivateNode('enc4');
+
+            // 4. Bottleneck
+            await activateNode('bottle', 'Bottleneck Representation');
+            await pulsePath('bottle', 'dec4');
+            await deactivateNode('bottle');
+
+            // 5. Decoder Path
+            const decoders = ['dec4', 'dec3', 'dec2', 'dec1'];
+            const atts = ['att4', 'att3', 'att2', 'att1'];
+            
+            for(let i=0; i<decoders.length; i++) {
+                await activateNode(atts[i], `Attention Gate ${4-i}: Filtering Features`);
+                await pulsePath(atts[i], decoders[i]);
+                await deactivateNode(atts[i]);
+
+                await activateNode(decoders[i], `UNet Decoder: Upsampling Layer ${4-i}`);
+                if(i < decoders.length - 1) {
+                    await pulsePath(decoders[i], decoders[i+1]);
+                    deactivateNode(decoders[i]);
+                }
+            }
+            await pulsePath('dec1', 'out1x1');
+            await deactivateNode('dec1');
+
+            // 6. Output
+            await activateNode('out1x1', 'Final 1x1 Conv');
+            await pulsePath('out1x1', 'output');
+            await deactivateNode('out1x1');
+
+            await activateNode('output', 'Output Mask Generated');
+            await sleep(1000);
+            await deactivateNode('output');
+
+            statusEl.textContent = "Cycle Complete. Resetting...";
+            await sleep(1000);
+            runCycle();
+        }
+
+        setTimeout(runCycle, 1000);
+
+    </script>
+</body>
+</html>

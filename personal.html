@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nikhil Bisht | Creative Lab</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- BACKGROUND CANVAS -->
+    <canvas id="bg-canvas"></canvas>
+    <input type="checkbox" id="theme-toggle" class="theme-toggle-checkbox">
+    <div class="site">
+        <header>
+            <div class="logo">
+                <a href="index.html"><span>N</span>B</a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">← Back to the Tech side</a></li>
+                </ul>
+            </nav>
+            <label for="theme-toggle" class="theme-toggle-label">
+                <i class="fa-solid fa-moon"></i>
+                <i class="fa-solid fa-sun"></i>
+            </label>
+        </header>
+
+        <section class="hero" style="height: 40vh; min-height: 300px;">
+            <div class="container">
+                <h1>Welcome to the other side of the coin!</h1>
+                <p> Algorithms dictate the mechanics of existence. <span style="color:var(--accent)">Obsession</span> provides the soul.</p>
+            </div>
+        </section>
+
+        <!-- HOBBIES CAROUSEL -->
+        <section class="section-pad" style="padding-top:0;">
+            <div class="container">
+                <div class="carousel-container" id="carousel">
+                    <button class="stack-nav prev-btn" id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="stack-nav next-btn" id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
+                    <!-- Cards injected by JS -->
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="container" style="text-align: center; opacity: 0.6; font-size: 0.9rem;">
+                &copy; 2025 Nikhil P. S. Bisht. Built with vanilla HTML, CSS, JavaScript, a dash of pixel art and some Dark Energy :D.
+            </div>
+        </footer>
+    </div>
+
+    <!--BACKGROUND SCRIPT -->
+    <script>
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        const toggle = document.getElementById('theme-toggle');
+        let width, height;
+        let particles = [];
+        let mouse = { x: -1000, y: -1000 };
+        let animationId;
+
+        const CONFIG = {
+            starCount: 1000, dustCount: 1000, starSpeed: 1.0, dustSpeed: 1.5,
+            mouseRadius: 200, mouseForce: 0.5
+        };
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            ctx.translate(width/2, height/2);
+        }
+
+        class Particle {
+            constructor(isDark) { this.isDark = isDark; this.init(true); }
+            init(randomZ = false) {
+                this.x = (Math.random() - 0.5) * width * 3;
+                this.y = (Math.random() - 0.5) * height * 3;
+                this.z = randomZ ? Math.random() * 2000 : 2000;
+                this.size = Math.random() * 2 + 1;
+                this.vx = 0; this.vy = 0;
+            }
+            update(speed) {
+                this.z -= speed;
+                const perspective = 300 / (300 + this.z);
+                const sx = this.x * perspective;
+                const sy = this.y * perspective;
+                const mx = mouse.x - width/2; const my = mouse.y - height/2;
+                const dx = sx - mx; const dy = sy - my;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                if(dist < CONFIG.mouseRadius) {
+                    const angle = Math.atan2(dy, dx);
+                    const force = (CONFIG.mouseRadius - dist) / CONFIG.mouseRadius;
+                    this.vx += Math.cos(angle) * force * CONFIG.mouseForce;
+                    this.vy += Math.sin(angle) * force * CONFIG.mouseForce;
+                }
+                if(!this.isDark) this.vy -= 0.05;
+                this.vx *= 0.95; this.vy *= 0.95;
+                this.x += this.vx; this.y += this.vy;
+                if(this.z <= 1 || Math.abs(sx) > width || Math.abs(sy) > height) this.init();
+            }
+            draw() {
+                const perspective = 300 / (300 + this.z);
+                const sx = this.x * perspective;
+                const sy = this.y * perspective;
+                const scale = (2000 - this.z) / 2000;
+                const sSize = Math.max(1, this.size * scale * 2);
+                let color = this.isDark ? `rgba(255,255,255,${scale})` : `rgba(40,10,0,${scale})`;
+                ctx.fillStyle = color;
+                ctx.fillRect(sx, sy, sSize, sSize);
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const isDark = !toggle.checked;
+            const count = isDark ? CONFIG.starCount : CONFIG.dustCount;
+            for(let i=0; i<count; i++) particles.push(new Particle(isDark));
+        }
+
+        function animate() {
+            const isDark = !toggle.checked;
+            ctx.clearRect(-width/2, -height/2, width, height);
+            particles.forEach(p => { p.update(isDark ? CONFIG.starSpeed : CONFIG.dustSpeed); p.draw(); });
+            animationId = requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+        toggle.addEventListener('change', () => {
+            document.body.classList.toggle('light-mode');
+            initParticles();
+        });
+        resize(); initParticles(); animate();
+    </script>
+
+    <!--HOBBIES CAROUSEL-->
+    <script>
+        const hobbies = [
+            { title: "Hiking", icon: "fa-person-hiking", desc: "From the icy glaciers of Alaska to the mysterious, ancient Appalachian, to the windy rivers of Germany and the beauty of North Florida, I love exploring every place I visit on foot!", meta: "Nature",
+             img:"assets/hiking.webp"  , imgdescp: "Nikhil's Hiking Adventures!" },
+            { title: "Biking", icon: "fa-bicycle", desc: "The joy of exploring the Big Bend region on paved and dirst trails is unmatched", meta: "Road/MTB", 
+            img:"assets/biking.webp", imgdescp: "Nikhil's Biking Adventures!" },
+            { title: "Bouldering", icon: "fa-mound", desc: "Solving vertical puzzles and trying new betas makes these forearms burn. V4-V5 grade climber :).", meta: "Strength", 
+            img:"assets/bouldering.webp"  , imgdescp: "Nikhil Climbing some V4s!" },
+            { title: "Astrophotography", icon: "fa-star", desc: "Love spending countless hours capturing stars and nebulae from my backyard.", meta: "Tech/Art", 
+            img:"assets/astrophotography.webp"  , imgdescp: "A collection of Nikhil's Astrophotography (and BITS' DOPY :D)" },
+            { title: "DnD", icon: "fa-dice-d20", desc: "Welcome to my hoemebrew campaign to rebel against a tyrant king :p", meta: "Creative", 
+            img:"assets/dnd.webp"  , imgdescp: "Nikhil's Homebrew Campaign The Bennu's Ruse" },
+            { title: "Woodworking", icon: "fa-hammer", desc: "Nothing like building Legos, but you also build the blocks. IRL Minecraft.", meta: "Craft", 
+            img:"assets/wooding.webp"  , imgdescp: "Some cool things I have built over the years!" },
+            { title: "Kayaking", icon: "fa-water", desc: "Exploring gator-infested rivers and lakes!", meta: "Nature", 
+            img:"assets/kayaking.webp"  , imgdescp: "Row Row Row your boat." },
+            { title: "Racket/Net Sports", icon: "fa-table-tennis-paddle-ball", desc: "Badminton & Racquetball & Table Tennis & Volleyball & ...", meta: "Sport", 
+            img:"assets/sports.webp"  , imgdescp: "" },
+            { title: "Gaming", icon: "fa-gamepad", desc: "Visual Storytelling 🤝 Unique gameplay mechanics? Get me on.", meta: "Strategy",
+             img:"assets/games.webp" , imgdescp: "A whole bunch of games Astronerd has played over the years :)" },
+            { title: "Husbandry", icon: "fa-cat", desc: "I was normal three cats ago.... *sigh", meta: "Patience",
+             img:"assets/pets.webp" , imgdescp: "All the pets Nikhil raises haha" }
+        ];
+
+        let currentIndex = 0;
+        const container = document.getElementById('carousel');
+
+        function createCards() {
+            hobbies.forEach((hobby, index) => {
+                const card = document.createElement('div');
+                card.classList.add('stack-card');
+                card.onclick = () => { currentIndex = index; updateCards(); };
+                card.innerHTML = `
+                    <i class="fa-solid ${hobby.icon} stack-icon"></i>
+                    <h3>${hobby.title}</h3>
+                    <p>${hobby.desc}</p>
+                    <div class="stack-img-box"><img src="${hobby.img}" alt="${hobby.imgdescp}"></div>
+                    <div class="stack-meta">${hobby.meta}</div>
+                `;
+                container.appendChild(card);
+            });
+            updateCards();
+        }
+
+        function updateCards() {
+            const cards = document.querySelectorAll('.stack-card');
+            cards.forEach((card, i) => {
+                const diff = i - currentIndex;
+                if(Math.abs(diff) > 2) {
+                    card.style.opacity = 0;
+                    card.style.pointerEvents = 'none';
+                    return;
+                }
+                
+                let x = diff * 150; // Horizontal shift
+                let y = diff * 90;  // Vertical arc
+                let z = -Math.abs(diff) * 100; // Depth
+                let scale = 1 - (Math.abs(diff) * 0.1);
+                let opacity = 1 - (Math.abs(diff) * 0.3);
+                let zIndex = 100 - Math.abs(diff);
+
+                if(diff === 0) {
+                     card.style.filter = "blur(0)";
+                     card.style.pointerEvents = "all";
+                     card.style.borderColor = "var(--accent)";
+                } else {
+                     card.style.filter = "blur(4px)";
+                     card.style.pointerEvents = "none";
+                     card.style.borderColor = "var(--glass-border)";
+                }
+
+                card.style.transform = `translate3d(${x}px, ${y}px, ${z}px) scale(${scale})`;
+                card.style.opacity = opacity;
+                card.style.zIndex = zIndex;
+            });
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if(currentIndex < hobbies.length - 1) { currentIndex++; updateCards(); }
+        });
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if(currentIndex > 0) { currentIndex--; updateCards(); }
+        });
+
+        createCards();
+    </script>
+</body>
+</html>

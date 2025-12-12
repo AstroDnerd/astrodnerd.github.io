@@ -1,0 +1,531 @@
+/* Import Main Variables & Fonts (assuming style.css is loaded, or we redefine essential vars) */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Montserrat:wght@300;400;600;800&family=Merriweather:ital,wght@0,300;0,700;1,300&display=swap');
+
+:root {
+  /* Re-declaring core variables for standalone usage if needed, 
+     but typically this file is loaded AFTER style.css */
+  --bg-color: #050505; 
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --accent: #38bdf8; /* Sky Blue */
+  --accent-glow: rgba(56, 189, 248, 0.3);
+  --glass-bg: rgba(15, 23, 42, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  --line-color: #334155;
+  --node-bg: #1e293b;  /* Slate 800 */
+  --node-border: #94a3b8; /* Slate 400 */
+  --accent-color: #38bdf8; /* Sky 400 */
+  --text-color: #f8fafc;
+  --attn-color: #f59e0b; /* Amber */
+  --gru-color: #8b5cf6; /* Violet */
+  --mem-color: #d946ef; /* Fuchsia for Memory */
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body: 'Merriweather', serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+/* Light Theme overrides */
+body.light-mode {
+  --bg-color: #fdefcc; /* Warm white */
+  --text-primary: #4a0404; /* Dark Red/Brown */
+  --text-secondary: #7c2d12; /* Rust */
+  --accent: #d97706; /* Amber */
+  --accent-glow: rgba(217, 119, 6, 0.2);
+  --text-color: #1a1b1c;
+  --accent-color: #032838; /* Sky Dark */
+  --attn-color: #493005; /* Amber */
+  --gru-color: #291c47; /* Violet */
+  --mem-color: #3d1543; /* Fuchsia for Memory */
+  --glass-bg: rgba(255, 255, 255, 0.4);
+  --glass-border: rgba(255, 165, 0, 0.2);
+  --card-shadow: 0 8px 32px 0 rgba(255, 140, 0, 0.15);
+  --line-color: #334155;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    line-height: 1.8;
+    margin: 0;
+}
+
+/* --- LAYOUT --- */
+.project-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 120px 20px 60px; /* Top padding clears fixed header */
+}
+
+/* --- TYPOGRAPHY --- */
+h1, h2, h3 {
+    font-family: var(--font-heading);
+    color: var(--text-primary);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    background: linear-gradient(to right, var(--text-primary), var(--accent));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+h2 {
+    font-size: 1.8rem;
+    border-left: 4px solid var(--accent);
+    padding-left: 15px;
+}
+
+h4 {
+    font-weight: 300;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--accent-color);
+    padding-bottom: 10px;
+    text-align: center;
+}
+p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.lead {
+    font-size: 1.3rem;
+    color: var(--text-primary);
+    font-weight: 300;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 2rem;
+    margin-bottom: 3rem;
+}
+
+/* --- MEDIA CONTAINERS --- */
+.media-block {
+    margin: 2rem 0;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.media-block img, 
+.media-block video {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.caption {
+    padding: 10px 15px;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+    background: var(--glass-bg);
+    border-top: 1px solid var(--glass-border);
+    text-align: center;
+}
+/* The collapse animation! */
+
+.media-block inbody {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    overflow: hidden;
+    padding-top: 20px;
+}
+
+.media-block insideh1 {
+    font-family: var(--font-serif);
+    font-weight: normal;
+    letter-spacing: 1px;
+    margin: 0 0 10px 0;
+    border-bottom: 1px solid var(--accent);
+    padding-bottom: 5px;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+}
+/* Controls positioned above figures */
+.controls {
+    margin-bottom: 20px;
+    z-index: 100;
+}
+button {
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 8px 24px;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+    border-radius: 4px;
+}
+button:hover {
+    background: var(--accent);
+    color: var(--bg-color);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+}
+
+.infographic-container {
+    display: flex;
+    gap: 30px; /* More space for captions */
+    position: relative;
+    align-items: flex-start;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+/* Wrapper to hold panel + caption */
+.panel-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+}
+
+/* Connecting Arrow */
+.arrow-connector {
+    position: absolute;
+    left: 50%;
+    top: 200px; /* Center relative to 400px height panel */
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 2px;
+    background: var(--text-secondary);
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 1s;
+}
+.arrow-connector::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -4px;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 10px solid var(--text-secondary);
+}
+
+.panel {
+    width: 400px;
+    height: 400px;
+    background: #1e293b;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    opacity: 0.3; /* Start dimmed */
+    transition: opacity 0.5s, box-shadow 0.5s;
+}
+
+.panel.active {
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    border-color: var(--text-secondary);
+}
+
+.panel-label {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-family: var(--font-body);
+    background: --glass-bg;
+    color: #e2e8f0;
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    font-size: 0.9rem;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.scale-bar {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    height: 5px;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    border-bottom: 1px solid white;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    font-family: var(--font-serif);
+    font-size: 0.8rem;
+    padding-bottom: 2px;
+    pointer-events: none;
+}
+
+.annotation {
+    position: absolute;
+    font-family: var(--font-serif);
+    font-size: 0.85rem;
+    color: var(--accent);
+    text-shadow: 0 1px 2px black;
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+}
+
+canvas {
+    display: block;
+}
+
+/* Dynamic Caption Styles */
+.caption-box {
+    margin-top: 15px;
+    min-height: 60px;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    font-family: var(--font-mono); /* Monospace for data feel */
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+.caption-box.visible {
+    opacity: 1;
+}
+.highlight {
+    color: var(--accent);
+    font-weight: bold;
+}
+
+
+/* UNet Animation */
+.diagram-container {
+    position: relative;
+    margin: 0;
+    width: 1000;
+    height: 550px;
+}
+
+/* --- SVG Layer for Lines --- */
+svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: visible;
+}
+
+.conn-line {
+    fill: none;
+    stroke: var(--line-color);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+}
+
+.flow-path {
+    fill: none;
+    stroke: var(--accent-color);
+    stroke-width: 3;
+    stroke-dasharray: 10 9999; /* Initial dot */
+    stroke-linecap: round;
+    opacity: 0;
+}
+
+/* --- Node Styling --- */
+.node {
+    position: absolute;
+    background: var(--node-bg);
+    border: 1px solid var(--node-border);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    z-index: 2;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+}
+
+.node.active {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+    background: #0ea5e9;
+    color: white;
+}
+
+.label {
+    position: absolute;
+    color: #64748b;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    pointer-events: none;
+}
+
+/* Specific Components */
+
+/* Input Tensor */
+.tensor {
+    width: 40px;
+    height: 60px;
+    perspective: 100px;
+}
+.tensor-stack {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px dashed var(--accent-color);
+    transform: rotateY(15deg);
+}
+
+/* ConvGRU */
+.gru-block {
+    width: 90px;
+    height: 120px;
+    border-color: var(--gru-color);
+    background: rgba(139, 92, 246, 0.05);
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 15px;
+}
+.gru-label {
+    margin-top: 5px;
+    color: var(--gru-color);
+}
+
+/* Memory State Node */
+.memory-state {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px dashed var(--mem-color);
+    background: rgba(217, 70, 239, 0.1);
+    color: var(--mem-color);
+    font-family: 'Times New Roman', serif;
+    font-style: italic;
+    font-size: 1rem;
+    z-index: 3;
+}
+.memory-state::after {
+    content: 'State';
+    position: absolute;
+    bottom: -15px;
+    font-size: 0.6rem;
+    font-family: sans-serif;
+    font-style: normal;
+    opacity: 0.7;
+}
+.memory-state.active {
+    background: var(--mem-color);
+    color: white;
+    border-style: solid;
+    box-shadow: 0 0 20px var(--mem-color);
+}
+
+/* UNet Layers */
+.enc, .dec {
+    width: 80px;
+    height: 40px;
+}
+.bottleneck {
+    width: 80px;
+    height: 40px;
+}
+
+/* Attention Gate */
+.att-gate {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border-color: var(--attn-color);
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--attn-color);
+    font-size: 0.65rem;
+}
+.att-gate.active {
+    background: var(--attn-color);
+    border-color: white;
+    color: white;
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
+}
+
+/* 1x1 Conv */
+.out-conv {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+/* Status Bar */
+.status-bar {
+    position: flex;
+    bottom: 0px;
+    font-family: monospace;
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    background: rgba(0,0,0,0.3);
+    z-index: 5;
+    text-align: center;
+    border-radius: 4px;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+
+/* --- CODE BLOCKS --- */
+pre {
+    background: #0f172a;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    border: 1px solid var(--glass-border);
+    margin: 2rem 0;
+}
+
+code {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    font-size: 0.9rem;
+}
+
+/* --- NAVIGATION --- */
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent);
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    margin-bottom: 20px;
+    transition: transform 0.2s;
+}
+
+.back-link:hover {
+    transform: translateX(-5px);
+}
+
+/* --- FOOTER --- */
+.project-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--glass-border);
+    text-align: center;
+    font-family: var(--font-heading);
+    color: var(--text-secondary);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+    h1 { font-size: 2rem; }
+    .project-container { padding-top: 100px; }
+}

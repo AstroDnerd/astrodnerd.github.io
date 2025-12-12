@@ -1,0 +1,184 @@
+/* MY STYLESHEET
+   Refactored for cleaner variables and better responsiveness.
+   Includes Dark/Light mode logic via the checkbox hack.
+*/
+
+/* --- FONTS --- */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,700;1,300&family=Montserrat:wght@300;400;600;800&display=swap');
+
+/* --- VARIABLES --- */
+:root {
+  /* Dark Theme by Default (It's cooler for tech) */
+  --bg: #0b1220;
+  --surface: #151e2e;
+  --text: #e6f7f1;
+  --text-muted: #94a3b8;
+  --accent: #21918c; /* Teal */
+  --accent-2: #311b59; /* Deep Purple */
+  --highlight: #d06a2b; /* Orange for contrast */
+  --shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body: 'Merriweather', serif;
+}
+
+/* Light Theme overrides when checked */
+#theme-toggle:checked ~ .site {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+}
+
+/* --- RESET & BASE --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; color: var(--text); }
+a { text-decoration: none; color: inherit; transition: 0.2s; }
+ul { list-style: none; }
+
+/* --- UTILITIES --- */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+.section-pad { padding: 80px 0; }
+.bg-alt { background-color: var(--surface); }
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  margin-right: 10px;
+}
+.primary-btn { background-color: var(--accent); color: white; }
+.primary-btn:hover { background-color: #1a7571; }
+.secondary-btn { border: 2px solid var(--accent); color: var(--accent); }
+.secondary-btn:hover { background-color: var(--accent); color: white; }
+
+/* --- HEADER --- */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background-color: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.logo span { color: var(--accent); font-weight: 800; }
+.logo { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; }
+
+nav ul { display: flex; gap: 30px; }
+nav a { font-family: var(--font-heading); font-size: 0.9rem; font-weight: 600; }
+nav a:hover { color: var(--accent); }
+.highlight-link { color: var(--highlight) !important; }
+
+/* Theme Toggle UI */
+.theme-toggle-checkbox { display: none; }
+.theme-toggle-label { cursor: pointer; font-size: 1.2rem; }
+.theme-toggle-label .fa-sun { display: none; }
+#theme-toggle:checked ~ .site .theme-toggle-label .fa-moon { display: none; }
+#theme-toggle:checked ~ .site .theme-toggle-label .fa-sun { display: inline-block; color: orange; }
+
+/* --- HERO --- */
+.hero {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.hero .container { display: flex; align-items: center; gap: 50px; }
+.hero-text { flex: 1; }
+.hero-text h1 { font-size: 4rem; line-height: 1.1; margin-bottom: 10px; }
+.hero-text h2 { font-size: 1.5rem; color: var(--accent); margin-bottom: 20px; font-weight: 400; }
+.hero-text p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 30px; max-width: 500px; }
+
+.hero-img { flex: 1; display: flex; justify-content: center; }
+.hero-img img {
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--accent);
+  box-shadow: var(--shadow);
+}
+/* Small Hero for internal pages */
+.small-hero { min-height: 40vh; text-align: center; justify-content: center; }
+
+/* --- PROJECTS GRID --- */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+.project-card {
+  background: var(--bg);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.project-card:hover { transform: translateY(-5px); }
+.card-img { height: 200px; background: #000; overflow: hidden; }
+.img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.5); font-weight: bold; }
+.card-content { padding: 25px; }
+.card-content h3 { margin-bottom: 10px; font-size: 1.2rem; }
+.tags span {
+  font-size: 0.75rem;
+  background: rgba(33, 145, 140, 0.2);
+  color: var(--accent);
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-right: 5px;
+  font-family: var(--font-heading);
+}
+.card-content p { font-size: 0.9rem; color: var(--text-muted); margin: 15px 0; }
+.card-links a { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-right: 15px; }
+.card-links a:hover { color: var(--accent); }
+
+/* --- SKILLS --- */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 40px;
+  margin-top: 40px;
+}
+.skill-category h3 { color: var(--accent); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+.skill-category ul li { margin-bottom: 8px; color: var(--text-muted); font-weight: 500; }
+
+/* --- CREATIVE TEASER --- */
+.creative-teaser {
+  background: linear-gradient(135deg, var(--accent-2), #000);
+  padding: 80px 0;
+  text-align: center;
+  color: white;
+}
+.creative-teaser h2 { color: white; margin-bottom: 15px; }
+.creative-teaser p { margin-bottom: 30px; opacity: 0.9; }
+
+/* --- CONTACT --- */
+.contact-box { text-align: center; background: var(--surface); padding: 50px; border-radius: 8px; margin-top: 30px; }
+.email-link { font-size: 1.5rem; font-weight: 700; color: var(--accent); display: block; margin: 20px 0; }
+.social-links a { font-size: 2rem; margin: 0 15px; opacity: 0.7; }
+.social-links a:hover { opacity: 1; color: var(--accent); }
+
+/* --- FOOTER --- */
+footer { text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.9rem; }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .hero .container { flex-direction: column-reverse; text-align: center; }
+  .hero-text p { margin: 0 auto 30px auto; }
+  header { padding: 20px; flex-direction: column; gap: 15px; }
+  nav ul { gap: 15px; flex-wrap: wrap; justify-content: center; }
+}

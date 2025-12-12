@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+  MY PORTFOLIO WEBSITE
+  Refactored to focus on Data Science & ML Researcher
+-->
+<head>
+    <meta charset='UTF-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name='description' content='Portfolio of Nikhil Bisht - Data Scientist & ML Researcher.'>
+    <meta name='author' content='Nikhil Bisht'>
+    <title>Nikhil Bisht | Data Scientist & ML Researcher</title>
+    
+    <!-- My Stylesheets -->
+    <link rel="stylesheet" href="style2.css" />
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- 
+      THEME TOGGLE
+      I'm using a checkbox hack to switch between light/dark mode without JS bloat.
+    -->
+    <input type="checkbox" id="theme-toggle" class="theme-toggle-checkbox">
+    
+    <div class="site">
+        
+        <!-- HEADER / NAVIGATION -->
+        <header>
+            <div class="logo">
+                <a href="#"><span>Nikhil</span> Bisht</a>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#projects">Engineering</a></li>
+                    <li><a href="#skills">Stack</a></li>
+                    <!-- Link to my creative side -->
+                    <li><a href="personal.html" class="highlight-link">Creative Lab <i class="fa-solid fa-flask"></i></a></li>
+                    <li><a href="#contact" class="btn-nav">Contact</a></li>
+                </ul>
+            </nav>
+            
+            <!-- Theme Toggle Label Icon -->
+            <label for="theme-toggle" class="theme-toggle-label">
+                <i class="fa-solid fa-moon"></i>
+                <i class="fa-solid fa-sun"></i>
+            </label>
+        </header>
+
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-text">
+                    <h3>Hello, I am</h3>
+                    <h1>Nikhil Bisht</h1>
+                    <!-- Typed.js will cycle through my professional titles here -->
+                    <h2>I am a <span class="var-text"></span></h2>
+                    <p>
+                        PhD Candidate transitioning to Industry. I architect 
+                        <strong>High-Performance ML pipelines</strong> and debug 
+                        <strong>distributed C++ systems</strong> for terabyte-scale simulations.
+                    </p>
+                    <div class="hero-btns">
+                        <a href="#projects" class="btn primary-btn">View Code</a>
+                        <a href="assets/Bisht_Nikhil_Industry_CV.pdf" target="_blank" class="btn secondary-btn">Download Resume</a>
+                    </div>
+                </div>
+                <!-- My Hero Image / Avatar -->
+                <div class="hero-img">
+                    <!-- TODO: Replace with a professional headshot, not a selfie -->
+                    <img src="assets/profile.webp" alt="Nikhil Bisht">
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="about" class="section-pad">
+            <div class="container">
+                <div class="section-title">
+                    <h2>The Engineer</h2>
+                </div>
+                <div class="about-content">
+                    <p>
+                        Most Data Scientists stop at `import sklearn`. I go deeper. 
+                        My background in <strong>Computational Astrophysics</strong> means I'm comfortable when the dataset is 50TB, the memory is leaking, and the simulation needs to run across 100 GPU nodes.
+                    </p>
+                    <p>
+                        Currently, I'm working with the <strong>ENZO codebase</strong> to forecast molecular cloud collapse using 3D U-Nets and ConvGRUs. I build systems that are robust, scalable, and mathematically rigorous.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION (Aligned with Resume) -->
+        <section id="projects" class="section-pad bg-alt">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Selected Engineering Projects</h2>
+                </div>
+                
+                <div class="project-grid">
+                    
+                    <!-- PROJECT 1: ENZO / ML -->
+                    <div class="project-card">
+                        <div class="card-img">
+                            <!-- Placeholder for my simulation GIF -->
+                            <div class="img-placeholder" style="background:#21918c;"></div>
+                        </div>
+                        <div class="card-content">
+                            <h3>Volumetric Forecasting (ENZO)</h3>
+                            <div class="tags">
+                                <span>PyTorch</span> <span>MPI</span> <span>HPC</span>
+                            </div>
+                            <p>
+                                Architected a distributed ETL pipeline and 3D Attention U-Net to predict star formation in chaotic gas clouds. Optimized I/O throughput by 67%.
+                            </p>
+                            <div class="card-links">
+                                <a href="projects/project1_sim_collapse.html">Case Study <i class="fa-solid fa-arrow-right"></i></a>
+                                <a href="#"><i class="fa-brands fa-github"></i> Source</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PROJECT 2: BARNES-HUT -->
+                    <div class="project-card">
+                        <div class="card-img">
+                            <div class="img-placeholder" style="background:#311b59;"></div>
+                        </div>
+                        <div class="card-content">
+                            <h3>N-Body Simulation Engine</h3>
+                            <div class="tags">
+                                <span>C++</span> <span>Octrees</span> <span>Algorithms</span>
+                            </div>
+                            <p>
+                                Implemented the Barnes-Hut algorithm using recursive Octrees. Reduced algorithmic complexity from O(N²) to O(N log N) for 100k+ particles.
+                            </p>
+                            <div class="card-links">
+                                <a href="#">Read More <i class="fa-solid fa-arrow-right"></i></a>
+                                <a href="#"><i class="fa-brands fa-github"></i> Source</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PROJECT 3: TNG50 -->
+                    <div class="project-card">
+                        <div class="card-img">
+                            <div class="img-placeholder" style="background:#d06a2b;"></div>
+                        </div>
+                        <div class="card-content">
+                            <h3>TNG50 Big Data Analysis</h3>
+                            <div class="tags">
+                                <span>Python</span> <span>HDF5</span> <span>Dask</span>
+                            </div>
+                            <p>
+                                Analyzed multi-terabyte cosmological datasets to track stellar radial migration. Built custom HDF5 data loaders for efficient memory mapping.
+                            </p>
+                            <div class="card-links">
+                                <a href="#">Read More <i class="fa-solid fa-arrow-right"></i></a>
+                                <a href="#"><i class="fa-brands fa-github"></i> Source</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SKILLS SECTION -->
+        <section id="skills" class="section-pad">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Technical Stack</h2>
+                </div>
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h3><i class="fa-solid fa-brain"></i> Machine Learning</h3>
+                        <ul>
+                            <li>PyTorch (Expert)</li>
+                            <li>3D Computer Vision</li>
+                            <li>Time-Series Forecasting</li>
+                            <li>Bayesian Inference</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h3><i class="fa-solid fa-server"></i> HPC & Systems</h3>
+                        <ul>
+                            <li>C++ / MPI / OpenMP</li>
+                            <li>Docker / Slurm</li>
+                            <li>Linux Debugging (GDB)</li>
+                            <li>Distributed Computing</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h3><i class="fa-solid fa-database"></i> Data Engineering</h3>
+                        <ul>
+                            <li>SQL / NoSQL</li>
+                            <li>HDF5 / Parquet</li>
+                            <li>ETL Pipelines</li>
+                            <li>Git / CI/CD</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CREATIVE TEASER SECTION -->
+        <section class="creative-teaser">
+            <div class="container">
+                <h2>I'm not just a machine.</h2>
+                <p>When I'm not optimizing gradients, I am a Digital Artist, Dungeon Master, and Astrophotographer.</p>
+                <a href="personal.html" class="btn primary-btn">Enter the Creative Lab</a>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact" class="section-pad">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Get In Touch</h2>
+                </div>
+                <div class="contact-box">
+                    <p>Interested in hiring a Physicist who codes production-ready C++?</p>
+                    <a href="mailto:nikhilbisht65@gmail.com" class="email-link">nikhilbisht65@gmail.com</a>
+                    <div class="social-links">
+                        <a href="https://github.com/AstroDnerd" target="_blank"><i class="fa-brands fa-github"></i></a>
+                        <a href="https://linkedin.com/in/nikhilpsbisht" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2025 Nikhil P. S. Bisht. Built with Vanilla JS & Dark Matter.</p>
+        </footer>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
