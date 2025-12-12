@@ -36,6 +36,9 @@ body.light-mode {
   --line-color: #334155;
 }
 
+p {
+      margin-bottom: 1em; /* or use px, rem, etc. */
+}
 /* --- RESET & BASICS --- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
