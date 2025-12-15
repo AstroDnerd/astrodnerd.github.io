@@ -454,6 +454,7 @@ h2::after {
 .p-info { padding: 25px; flex-grow: 1; display: flex; flex-direction: column;}
 .p-info h3 { font-family: var(--font-heading); margin-bottom: 10px; color: var(--accent); }
 .p-info p { font-size: 0.9rem; margin-bottom: 15px; opacity: 0.9; }
+.p-info a { font-size: 0.9rem; margin-bottom: 15px; opacity: 0.9; }
 .p-stack { margin-top: auto; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); }
 
 /* --- TECH STACK (D3 Container) --- */
