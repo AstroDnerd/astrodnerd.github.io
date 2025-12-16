@@ -8,9 +8,10 @@
 var typed = new Typed(".var-text", {
     strings: [
         "Machine Learning Researcher.",
+        "Data Analyst.",
         "High Performance Computing Engineer.",
-        "Computational Astrophysicist.",
-        "Problem Solver."
+        "Problem Solver.",
+        "Computational Astrophysicist."
     ],
     typeSpeed: 60,   // How fast I type
     backSpeed: 40,   // How fast I delete
